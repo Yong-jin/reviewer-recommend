@@ -1,0 +1,805 @@
+##GREETING
+#if ($mailId == 1)
+Dear Journal Manager,
+
+#elseif ($toRole == "AU")
+#if (${toEmail})
+Dear $systemUtil.trim("#authorName"),
+
+#else
+Dear Author,
+
+#end
+#elseif ($toRole == "MA")
+Dear $systemUtil.trim("#managerName"),
+
+#elseif ($toRole == "CE")
+Dear $systemUtil.trim("#chiefEditorName"),
+
+#elseif ($toRole == "AE")
+Dear $systemUtil.trim("#associateEditorName"),
+
+#elseif ($toRole == "GE")
+Dear $systemUtil.trim("#guestEditorName"),
+
+#elseif ($toRole == "RV")
+Dear $systemUtil.trim("#reviewerName"),
+
+#elseif ($toRole == "OW")
+Dear $systemUtil.trim("#accountCreatorName"),
+
+#elseif ($toRole == "TE")
+Dear $systemUtil.trim("#accountCreateeName"),
+
+#end
+##INTRO
+#if ($mailId == 0 || $mailId == 4 || $mailId == 6)
+Thank you for submitting the following manuscript to ${journal.title}.
+#elseif ($mailId == 1)
+This mail is to notify you of the following manuscript submission to ${journal.title}.
+#elseif ($mailId == 2 || $mailId == 5 || $mailId == 7)
+Thank you for submitting a revised version of the following manuscript to ${journal.title}.
+#elseif ($mailId == 3)
+This mail is to notify you of the following revised manuscript's submission to ${journal.title}.
+#elseif ($mailId == 8 && $manuscriptTrackId == 0)
+This mail is to notify you of the following manuscript submission to ${journal.title}. The submitted manuscript has been also confirmed by journal manager. 
+#elseif ($mailId == 8 && $manuscriptTrackId == 1)
+This mail is to notify you of the following manuscript submission to a special issue track of ${journal.title}. The submitted manuscript has been also confirmed by journal manager.
+#elseif ($mailId == 9)
+This mail is to notify you of the following revised manuscript's submission to ${journal.title}. The submitted manuscript has been also confirmed by journal manager and the previous version of submitted manuscript has been managed by you who serve as an associate editor.
+#elseif ($mailId == 10 || $mailId == 11)
+There is the following manuscript submitted to ${journal.title}. Since you are serving as an associate editor of this journal and the subject of the submitted manuscript seems to be under of your expertise, you are entrusted with the task of the manuscript's review process.
+#elseif ($mailId == 12)
+Recently, you assigned an associate editor into the following manuscript submitted to ${journal.title} for the review process management. He has accepted your request of the review process management.  
+#elseif ($mailId == 13)
+Recently, you assigned an associate editor into the following manuscript submitted to ${journal.title} for the review process management. However, he has declined your request of the review process management.
+#elseif ($mailId == 14 || $mailId == 15)
+Recently, you have been assigned to the following manuscript submitted to ${journal.title} for the review process.
+#elseif ($mailId == 16 || $mailId == 22)
+There is a following manuscript submitted to ${journal.title} and I believe it falls within your area of expertise. So, we would like to invite you as a reviewer for it.
+#elseif ($mailId == 17)
+For the following manuscript submitted to ${journal.title}:
+#elseif ($mailId == 18 || $mailId == 19)
+There is a following manuscript submitted to ${journal.title} and I believe it falls within your area of expertise and you are a well-qualified scholar. So, we would like to assign you to a reviewer for it.
+#elseif ($mailId == 20 || $mailId == 21)
+Thank you for accepting our invitation to review the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 23 || $mailId == 24)
+Recently, you have been invited to review the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 25)
+Thank you for completing your review for the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 26 || $mailId == 27 || $mailId == 28)
+Recently, you have been assigned to review the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 29)
+This mail is to notify you of $systemUtil.trim("#reviewCompleteCount") reviewers' completion of their reviews for the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 30)
+This mail is to notify you of an associate editor ($systemUtil.trim("#associateEditorName"))'s completion of review process for the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 31)
+Congratulations! We are pleased to inform you that we have [reviewDecision]ed your manuscript submitted to ${journal.title}. 
+#elseif ($mailId == 32 || $mailId == 33)
+We have received all review comments from our reviewers on the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 34 || $mailId == 35)
+Recently, you have been requested to submit a revised version of the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 36)
+The author(s) are now preparing a revised version of the following manuscript submitted to ${journal.title}. 
+#elseif ($mailId == 37)
+We approve your request to extend the deadline for submission of a revised version of the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 38)
+Recently, you have requested to extend the deadline for submission of a revised version of the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 39)
+We are now sending to you the pre-determined review result of the following manuscript submitted to ${journal.title}.
+#elseif ($mailId == 40 || $mailId == 41)
+Recently, you have been requested to submit the camera-ready version of the following manuscript accepted to ${journal.title}.
+#elseif ($mailId == 42)
+Thank you for submitting the camera-ready version of the following manuscript accepted to ${journal.title}.
+#elseif ($mailId == 43)
+This mail is to notify you of the camera-ready version submission of the following manuscript accepted to ${journal.title}.
+#elseif ($mailId == 44)
+Recently, you have submitted the camera-ready version of the following manuscript accepted to ${journal.title}.
+#elseif ($mailId == 45)
+This mail is to confirm you that the submitted camera-ready version of the following manuscript has no problem and it will be used to make the gallery proofs.
+#elseif ($mailId == 46)
+We are pleased to let you know that the gallery proofs of the following manuscript are ready. 
+#elseif ($mailId == 47)
+This mail is to let you know that some corrections to the gallery proofs of the following manuscript have been requested by the author(s).
+#elseif ($mailId == 48)
+This mail is to let you know that the gallery proofs of the following manuscript have been finally confirmed by the author(s).
+#elseif ($mailId == 49)
+This mail is to let you know that your account was created at MANUSCRIPT LINK (http://www.manuscriptlink.com), a promising web based service to manage the editorial process of academic journals.
+#elseif ($mailId == 50)
+This mail is to let you know that your account was created at the following online manuscript submission and review system of ${journal.title}.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 51)
+This mail is to let you know that your account was created at the following online manuscript submission and review system of ${journal.title}. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Your account was created to submit your manuscript to ${journal.title} by the following co-author.
+
+Account creator (manuscript co-author): $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 52)
+This mail is to let you know that your account was created at the following online manuscript submission and review system of ${journal.title}. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Your account was created to appoint you an editorial member of ${journal.title} by the following journal manager.
+
+Account creator (journal manager): $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 53)
+This mail is to let you know that your account was created at the following online manuscript submission and review system of ${journal.title}. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Your account was created to appoint you a reviewer of ${journal.title} by the following editorial member.
+
+Account creator (editorial member): $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 54)
+Hello, 
+
+We have received a request to reset the password for your account at ManuscriptLink (http://www.manuscriptlink.com).
+Please follow the link below to reset your password:
+[passwordChangeUrl]
+
+#end
+##MANUSCRIPT_SUMMARY
+#if ($mailId == 0 || $mailId == 1 || $mailId == 4)
+
+#manuscriptSummaryWithSubmissionDateWithoutSubmitId
+#elseif ($mailId == 11 || $mailId == 15)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdWithoutRequest
+#elseif ($mailId == 2 || $mailId == 3 || $mailId == 5 || $mailId == 6 || $mailId == 7 || $mailId == 8 || $mailId == 9 || $mailId == 10 || $mailId == 12 || $mailId == 13 || $mailId == 14 || $mailId == 29 || $mailId == 30 || $mailId == 31 || $mailId == 32 || $mailId == 33 || $mailId == 39)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitId
+#elseif ($mailId == 16 || $mailId == 17 || $mailId == 18 || $mailId == 19 || $mailId == 20 || $mailId == 21 || $mailId == 22 || $mailId == 23 || $mailId == 24 || $mailId == 25 || $mailId == 26 || $mailId == 27 || $mailId == 28)
+
+#manuscriptSummaryToReviewer
+#elseif ($mailId == 34 || $mailId == 35 || $mailId == 40 || $mailId == 41)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateWithoutRequest
+#elseif ($mailId == 36 || $mailId == 37 || $mailId == 38)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDate
+#elseif ($mailId == 42 || $mailId == 43 || $mailId == 44 || $mailId == 45 || $mailId == 46 || $mailId == 47 || $mailId == 48)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDate
+#end
+##BODY
+#if ($mailId == 0)
+In a couple of days, a confirmation e-mail including the manuscript ID will be again forwarded to you when the journal manager looks through your submission and confirms it. Further progress on your submission can be checked through the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you have any question regarding your submission, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 1)
+Please visit the following online manuscript submission & peer-review system, and confirm the newly submitted manuscript after looking through the submission information.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 3)
+Please visit the following online manuscript submission & peer-review system, and confirm the submitted manuscript after looking through the submission information.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 2) 
+In a couple of days, a confirmation e-mail will be again forwarded to you when we look through your submission and confirm it. Further progress on your submission can be checked through the following online system:
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you have any question regarding your submission, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 4 || $mailId == 5) 
+However, there are some problems on your manuscript and/or the related information. The details of problems are as follows:
+
+[comments]
+
+Please correct your manuscript according to the above mentioned comments, and again submit the corrected one to the following online manuscript submission and peer-review system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+To submit the corrected manuscript in the online system, please do not open a new manuscript submission page, but just access the existing online page where you submitted the original manuscript.
+
+If you have any question regarding your submission, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 6 || $mailId == 7) 
+We completely confirm your submission of the above manuscript into ${journal.title}. The above manuscript is accepted for review processing on the understanding that it has not been published elsewhere (or submitted to another journal). Exceptions to this rule are manuscripts containing material disclosed at conferences. You also confirm that the author(s) from various institutions agree with the contents of the submitted manuscript.
+
+We will organize a fast peer-review, and if your manuscript is accepted, the manuscript will be published finally. We aim to process manuscripts quickly. You can check the peer-review process of your manuscript in the following online manuscript submission & peer-review system.
+ 
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you have any question regarding your submission, please contact the journal manager while mentioning the manuscript title and ID.
+
+Best regards,
+#elseif ($mailId == 8)
+We would appreciate your efforts on the chief editor's process of the above manuscript submitted to ${journal.title}. Please visit the following online manuscript submission & peer-review system and make progress on the manuscript's review process. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 9) 
+We would appreciate your efforts on the associate editor's process of the above updated manuscript submitted to ${journal.title}. Please visit the following online manuscript submission & peer-review system and make progress on the manuscript's review process by selecting proper reviewers.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 10 || $mailId == 11) 
+I would appreciate you if you take the review process of the above manuscript submitted to ${journal.title}. Please visit the following online system and accept our request to take review process on it by selecting proper reviewers and collecting review results.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you think that the submitted manuscript is not proper to your handling of review process, you can decline this request by clicking the correspinding button provided in the online manuscript submission & peer-review system.
+
+[Additional message from the chief editor]
+[comments]
+
+Best regards,
+#elseif ($mailId == 12)
+The associate editor accepting the request of review process management: $systemUtil.trim("#associateEditorName") ($systemUtil.trim("#associateEditorEmail"))
+
+Best regards, 
+#elseif ($mailId == 13) 
+The associate editor declining the request of review process management: [aeName] ([aeEmail])
+
+The reason for declining the request: [decline reason]
+[comments]
+
+Please assign other associate editor into the submitted manuscript.
+
+Best regards,
+#elseif ($mailId == 14) 
+However, I would like to cancel the request to manage the review process and assign it to other associate editor. 
+
+I will contact you with other manuscript next time.
+
+Best regards,
+#elseif ($mailId == 15) 
+However, I have not yet received your response about whether or not you accept the request to manage the review process.
+
+I consider you are very busy so that I would like to cancel the request to manage the review process and assign it to other associate editor. 
+
+I will contact you with other manuscript next time.
+
+Best regards,
+#elseif ($mailId == 16 || $mailId == 22) 
+A copy of the manuscript's abstract is attached to this e-mail. We request that your review be completed by within [durationReviewByWeeks] weeks. If you are unable to meet this schedule or you are unable to perform the review due to some reasons, it would be helpful if you would suggest a colleague that could review the manuscript. 
+
+Please click on the following link to let us know whether or not you are able to review this manuscript
+
+URL: [reviewInviteUrl]
+
+I realize that our expert reviewers greatly contribute to the high standards of the journal, and I thank you for your present and/or future participation.
+
+Best regards,
+#elseif ($mailId == 17)
+the following reviewer declined your review invitation. 
+
+Name: $systemUtil.trim("#reviewerName")
+Email: ${toEmail}
+Reason to decline: [reviewInviteRejectReason]
+
+Please invite or assign other reviewer to the above manuscript.
+
+Best regards,
+#elseif ($mailId == 18 || $mailId == 20 || $mailId == 27)
+We ask you to complete your review evaluation by [dueDate] and provide the comments to our review system. Please click the following url and complete your review.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you forgot your password, please click the link in "Forgot your password?" section of the page shown by the above URL and insert your email (${toEmail}) in the shown input form.
+
+Best regards,
+#elseif ($mailId == 19 || $mailId == 21)
+We ask you to complete your review evaluation by [dueDate] and provide the comments to our review system. Please click the following url and complete your review.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+ 
+To login to the above online system, please use your account information sent to you through a separate email.
+
+Best regards,
+#elseif ($mailId == 23)
+However, we would like to cancel the reviewer invitation and assign the manuscript to other possible reviewer. 
+
+Thanks for your time and I hope you will be able to review other manuscripts in the near future.
+
+Best regards,
+#elseif ($mailId == 24)
+However, we have not yet received your response about whether or not you accept our invitation to review the manuscript.
+
+We consider you are very busy so that we would like to cancel the invitation and assign it to other possible reviewer.
+
+Thanks for your time and I hope you will be able to review other manuscripts in the near future.
+
+Best regards,
+#elseif ($mailId == 25)
+Your time and effort is greatly appreciated by the journal editorial members and by the authors.
+
+Best regards,
+#elseif ($mailId == 26)
+We consider that you are reviewing the manuscript, but the review process has come to end due to some reasons. So, you do not need to submit your review result to the online system.
+
+Thanks for your time and I hope you will be able to review other manuscripts in the near future.
+
+Best regards,
+#elseif ($mailId == 28)
+We asked you to complete your review of the above manuscript by [dueDate], but your review results have not yet been delivered to us. We would be grateful if you would submit your review result as soon as possible at the following online manuscript submission & peer-review system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 29 && ($journalType == 'A' || $journalType == 'B'))
+Please login to the following online system and submit your opinion on reviewers' results to the chief editor.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 29 && ($journalType == 'C' || $journalType == 'D'))
+Please login to the following online system and submit your opinion on whether to accept the manuscript's publication to the chief editor. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 30)
+Please login to the following online system and decide the final review result of the current manuscript after looking through the associate editor and reviewers' comments. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 31)
+The second half of this email contains important review comments that you must follow to ensure successful publication of your paper, and you can also find them in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+What you should do at the next step is to make your camera-ready paper for the above manuscript. When making your camera-ready paper, please take into consideration all review comments.
+
+Don't forget that you should use the following template to make the camera-ready paper.
+
+Camera-ready paper template: [cameraReadyTemplateUrl]
+
+The deadline for the camera-ready paper submission is [cameraReadySubmitDate]. We cannot guarantee to include your paper in final edition, in case of late submission of your camera-ready paper.
+
+When you submit the camera-ready paper, please fill up the form of copyright transfer agreement, which you can download from the following URL, and include it.
+
+Form of copyright transfer agreement: [copyrightUrl]
+
+If you have any question regarding your camera-ready paper, please contact the journal manager. 
+
+Thank you for submitting your manuscript to ${journal.title}.
+#elseif ($mailId == 32)
+Overall review result: [reviewDecision]
+
+The second half of this email contains important review comments and you can also find them in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Assuming you address the reviewers' concerns in a satisfactory manner, you can revise the original manuscript and again submit it to the above online system. 
+
+When preparing it, you should write the reply letter including a list of responses to the review comments. The reply letter to the review comments should be uploaded as a separate file in addition to your revised manuscript. Acceptable formats for the reply letter include PDF (preferred) and MS Word.
+
+The deadline for submission of the revised manuscript and replay letter is [updatedManuscriptSubmitDate]. If you have any question regarding the revised manuscript, please contact the journal manager.
+
+Thank you for submitting your manuscript to ${journal.title}.
+#elseif ($mailId == 33)
+Overall review result: [reviewDecision]
+
+We regret to inform you that based on the enclosed review comments and the editor's reading of your manuscript, we are unable to recommend its publication to ${journal.title}. 
+
+The second half of this email contains important review comments and you can also find them in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+We hope that the review comments will help you in your future research. After further consideration based on the review comments, you may rewrite your manuscript and re-submit it newly to ${journal.title}.
+
+Thank you for submitting your manuscript to ${journal.title}.
+#elseif ($mailId == 34)
+You can find the review comments in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+When preparing a revised version of your manuscript, you should write the reply letter including a list of responses to the review comments. The reply letter to the review comments should be uploaded as a separate file in addition to your revised manuscript. Acceptable formats for the reply letter include PDF (preferred) and MS Word.
+
+The deadline for submission of the revised manuscript and replay letter is [updatedManuscriptSubmitDate].
+
+If you have any question regarding the revised manuscript, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 35)
+The deadline for submission of the revised manuscript and replay letter was [updatedManuscriptSubmitDate], but we have not yet received them. If we will not receive them soon, we can think that you give up the submission of your revised manuscript.
+
+You can find the review comments in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+When preparing a revised version of your manuscript, you should write the reply letter including a list of responses to the review comments. The reply letter to the review comments should be uploaded as a separate file in addition to your revised manuscript. Acceptable formats for the reply letter include PDF (preferred) and MS Word.
+
+If you have any question regarding the revised manuscript, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 36)
+The deadline for submission of the revised manuscript and replay letter was [updatedManuscriptSubmitDate], but the author(s) requested the deadline extension to [dueDate]. After discussing with editorial members about this request, please let the authors know the decision on whether to accept the request through the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Best regards,
+#elseif ($mailId == 37)
+The updated deadline for submission of the revised manuscript and replay letter is confirmed to [dueDate]. Please submit them through the following online system by the deadline.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 38)
+We are sorry, but we can not accept your request to extend the deadline due to our tight schedule. The original deadline is [updatedManuscriptSubmitDate] and submit the revised manuscript and replay letter through the following online system by the deadline.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 39)
+We regret to inform you that we have decided to reject the publication of your manuscript to ${journal.title} prior to gathering review results of reviewers. 
+
+The second half of this email contains important comments on your manuscript and you can also find them in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+We hope that the comments on your manuscript will help you in your future research. After further consideration based on the comments, you may rewrite your manuscript and re-submit it newly to ${journal.title}.
+#elseif ($mailId == 40)
+When making your camera-ready paper, please take into consideration all review comments and you can find them in the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+Don't forget that you should use the following template to make the camera-ready paper.
+
+Camera-ready paper template: [cameraReadyTemplateUrl]
+
+The deadline for the camera-ready paper submission is [cameraReadySubmitDate]. We cannot guarantee to include your paper in final edition, in case of late submission of your camera-ready paper.
+
+When you submit the camera-ready paper, on the other hand, please fill up the form of copyright transfer agreement, which you can download from the following URL, and include it.
+
+Form of copyright transfer agreement: [copyrightUrl]
+
+If you have any question regarding your camera-ready paper, please contact the journal manager. 
+#elseif ($mailId == 41)
+The deadline for the camera-ready paper submission is [cameraReadySubmitDate], but we have not yet received them from you. Please submit it as soon as possible at the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+When making your camera-ready paper, please take into consideration all review comments
+
+Don't forget that you should use the following template to make the camera-ready paper.
+
+Camera-ready paper template: [cameraReadyTemplateUrl]
+
+When you submit the camera-ready paper, please fill up the form of copyright transfer agreement, which you can download from the following URL, and include it.
+
+Form of copyright transfer agreement: [copyrightUrl]
+
+If you have any question regarding your camera-ready paper, please contact the journal manager.
+#elseif ($mailId == 42)
+After looking through the submitted camera-ready paper, we will send a confirmation email to you soon if there is no problem to make gallery proofs with it. Further progress on your camera-ready paper can be also checked through the following online system.  
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If you have any question regarding your camera-ready paper, please contact the journal manager.
+
+Best regards,
+#elseif ($mailId == 43)
+Please login to the following online system and determine if the submitted camera-ready paper has problems to make gallery proofs of it.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 44)
+However, we now return it back to you because it has the following problems to make gallery proofs of your camera-ready version.
+
+[The reason to return the submitted camera-ready paper back to the author(s)]
+[comments]
+
+Please correct your camera-ready paper again and re-submit it through the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+After looking through the submitted camera-ready paper, we will send a confirmation email to you soon if there is no problem to make gallery proofs with it. Further progress on your camera-ready paper can be checked through the online system.  
+#elseif ($mailId == 45)
+We will contact you again when the gallery proofs of your camera-ready version are ready.
+
+Best regards,
+#elseif ($mailId == 46)
+Please login to the following online system and look though the gallery proofs of your camera-ready version. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+If there are some requests to you at the gallery proofs, please let us know your addition or update based on the requests through any ways. In addition to that, you find any problems on the gallery proofs, please let us know it also. If you think that the current gallery proofs can be published as there are, please confirm it through the online system. 
+
+Best regards,
+#elseif ($mailId == 47)
+[Author(s)' requests to make correction to gallery proofs]
+[comments]
+
+Please correct the current gallery proofs according to the requests and upload the corrected version to the following online system.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 48)
+Please make progress on publication with the current gallery proofs and change the manuscript's status into "Published" in the following online system after the successful publication of it. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 49 || $mailId == 50)
+
+Your account of the online system is as follows:
+
+Login ID (email): ${accountCreator.getUsername()}
+
+#manuscriptLinkIntro
+Best regards,
+#elseif ($mailId == 51 || $mailId == 52 || $mailId == 53)
+
+In the online system, the account information of $systemUtil.trim("#accountCreateeName") is as follows:
+
+Login ID (email): $accountCreatee.getUsername()
+Password: ${randomPassword}
+
+After login to the above system, you can change the current password in the menu "My Profile > My Information > Password Change".
+ 
+#manuscriptLinkIntro
+Best regards,
+#elseif ($mailId == 53)
+
+The above URL is valid just during one day.
+
+Best regards,
+#end
+##MANUSCRIPT_OR_REVIEWRESULTS_INFO
+#if ($mailId == 16 || $mailId == 22)
+
+[Manuscript information]
+Title: ${manuscript.title}
+Abstract: ${manuscript.paperAbstract}
+#elseif ($mailId == 31 || $mailId == 32 || $mailId == 33 || $mailId == 39)
+
+=Review Results=
+------------------------
+[reviewResultByEditorTitle]
+[comments]
+
+[reviewResultByAssociateEditorTitle]
+[reviewResultByAssociateEditor]
+
+[reviewResultByReviewersTitle] 
+[reviewResultByReviewers]
+------------------------
+#end
+
+##CLOSING
+#if ($closingRole == "ML")
+#closingByManuscriptLink
+#elseif ($closingRole == "MA")
+#closingByManager
+#elseif ($closingRole == "CE")
+#closingByChiefEditor
+#elseif ($closingRole == "AE")
+#closingByAssociateEditor
+#elseif ($closingRole == "GE")
+#closingByGuestEditor
+#end
+##########################################################
+## MACRO
+#macro(greetingReviewer)
+${reviewerSalutation} ${reviewerFirtname} ${reviewerLastname},
+#end
+#macro(greetingNewUser)
+${newUserSalutation} ${newUserFirtname} ${newUserLastname},
+#end
+#macro(manuscriptSummaryWithSubmissionDateWithoutSubmitId)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: $systemUtil.trim("#submitDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitId)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: $systemUtil.trim("#submitDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdWithoutRequest)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: [submitDate]
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDate)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: $systemUtil.trim("#submitDate")
+Date of Review Result Report: $systemUtil.trim("#notificationDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateWithoutRequest)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: [submitDate]
+Date of Review Result Report: [notificationDate]
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDate)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: $systemUtil.trim("#submitDate")
+Date of Review Result Report: $systemUtil.trim("#acceptDate")
+Date of Camera-ready Paper Submission: $systemUtil.trim("#cameraReadyUploadDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDateWithoutRequest)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+Author(s): $systemUtil.trim("#authorNames")
+Corresponding Author: $systemUtil.trim("#correspondingAuthorName")
+Affiliation of Corresponding Author: $systemUtil.trim("#correspondingAuthorAffiliation")
+Date of Manuscript Submission: [submitDate]
+Date of Review Result Report: [acceptDate]
+Date of Camera-ready Paper Submission: [cameraReadyUploadDate]
+#end
+#macro(manuscriptSummaryToReviewer)
+#if ($manuscriptTrackId == 1)
+Special Issue: ${specialIssueTitle}
+#end
+Manuscript ID: ${manuscript.submitId}
+Title: ${manuscript.title}
+#end
+#macro(closingByManuscriptLink)
+Manager of ManuscriptLink
+
+#noReply 
+#end
+#macro(closingByManager)
+$systemUtil.trim("#managerName"), Journal Manager
+${journal.title}
+Email: $manuscript.getManager().getUsername()
+Homepage: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByChiefEditor)
+$systemUtil.trim("#chiefEditorName"), Chief Editor
+${journal.title}
+Email: $manuscript.getChiefEditor().getUsername()
+Homepage: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByAssociateEditor)
+$systemUtil.trim("#associateEditorName"), Associate Editor
+${journal.title}
+Email: $manuscript.getAssociateEditor().getUsername()
+Homepage: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByGuestEditor)
+$systemUtil.trim("#guestEditorName"), Guest Editor
+${journal.title}
+Email: $manuscript.getGuestEditor().getUsername()
+Homepage: $journal.getHomepage()
+
+#noReply
+#end
+#macro(manuscriptlinkJournalUrl)
+#if(${toEmail})
+* Online System URL: ${journalUrl}?id=${toEmail}
+#else
+* Online System URL: ${journalUrl}
+#end
+#end
+#macro(manuscriptLinkIntro)
+In ManuscriptLink online system,
+
+* If you are an author of manuscript, you can submit your manuscript and keep a close watch over the on-going review process including the review history of past manuscripts.
+* If you are a journal manager of a journal, you can create and manage a new journal submission and review service, and customize your service according to the demand of editorial members and authors.  
+* If you are an editorial member of a journal, you can manage a review process of your journal and enhance the academic value of the journal by accepting or rejecting publication of submitted manuscripts.
+* If you are a reviewer of a journal, you can evaluate submitted manuscripts and submit your review results to editorial members of the journal.
+#end
+#macro(authorNames)
+$coAuthorService.getCoAuthorNames($manuscript.getId())
+#end
+#macro(reviewCompleteCount)
+$journalConfigurationService.getByJournalId($journal.getId()).getReviewCompleteCount()
+#end
+#macro(correspondingAuthorName)
+$contactService.getFullName($manuscript.getCorresAuthor().getUser().getContact(), $journal.getLanguageCode())
+#end
+#macro(correspondingAuthorAffiliation)
+$manuscript.getCorresAuthor().getUser().getContact().getInstitution()
+#end
+#macro(submitDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("I").getDate(), $manuscript.getLastEventDateTime("I").getTime(), $request, $locale)
+#end
+#macro(notificationDate)
+#if ($manuscript.getStatus().equals("D"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("D").getDate(), $manuscript.getLastEventDateTime("D").getTime(), $request, $locale)
+#elseif($manuscript.getStatus().equals("A"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("A").getDate(), $manuscript.getLastEventDateTime("A").getTime(), $request, $locale)
+#elseif($manuscript.getStatus().equals("J"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("J").getDate(), $manuscript.getLastEventDateTime("J").getTime(), $request, $locale)
+#end
+#end
+#macro(acceptDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("A").getDate(), $manuscript.getLastEventDateTime("A").getTime(), $request, $locale)
+#end
+#macro(cameraReadyUploadDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("M").getDate(), $manuscript.getLastEventDateTime("M").getTime(), $request, $locale)
+#end
+#macro(authorName)
+#if ($userService.getByUsername(${toEmail}).getContact().getSalutation() == -1)
+$userService.getByUsername(${toEmail}).getContact().getFirstName() $userService.getByUsername(${toEmail}).getContact().getLastName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$userService.getByUsername(${toEmail}).getContact().getSalutation()", null, $locale) $userService.getByUsername(${toEmail}).getContact().getFirstName() $userService.getByUsername(${toEmail}).getContact().getLastName()
+#end
+#end
+#macro(managerName)
+#if ($manuscript.getManager().getContact().getSalutation() == -1)
+$manuscript.getManager().getContact().getFirstName() $manuscript.getManager().getContact().getLastName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getManager().getContact().getSalutation()", null, $locale) $manuscript.getManager().getContact().getFirstName() $manuscript.getManager().getContact().getLastName()
+#end
+#end
+#macro(chiefEditorName)
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getChiefEditor().getContact().getSalutation()", null, $locale) $manuscript.getChiefEditor().getContact().getFirstName() $manuscript.getChiefEditor().getContact().getLastName()
+#end
+#macro(associateEditorName)
+#if ($mailId == 10)
+[AssociateEditor]
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getAssociateEditor().getContact().getSalutation()", null, $locale) $manuscript.getAssociateEditor().getContact().getFirstName() $manuscript.getAssociateEditor().getContact().getLastName()
+#end
+#end
+#macro(guestEditorName)
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getGuestEditor().getContact().getSalutation()", null, $locale) $manuscript.getGuestEditor().getContact().getFirstName() $manuscript.getGuestEditor().getContact().getLastName()
+#end
+#macro(reviewerName)
+#set($reviewer = $userService.getByUsername($toEmail))
+#if ($reviewer.getContact().getSalutation() == -1)
+$messageSource.getMessage("signin.salutationDesignation.$reviewer.getContact().getSalutation()", null, $locale) $reviewer.getContact().getFirstName() $reviewer.getContact().getLastName()
+#else
+$reviewer.getContact().getFirstName() $reviewer.getContact().getLastName()
+#end
+#end
+#macro(associateEditorEmail)
+$manuscript.getAssociateEditor().getUsername()
+#end
+#macro(accountCreatorName)
+$messageSource.getMessage("signin.salutationDesignation.$accountCreator.getContact().getSalutation()", null, $locale) $accountCreator.getContact().getFirstName() $accountCreator.getContact().getLastName()
+#end
+#macro(accountCreateeName)
+$messageSource.getMessage("signin.salutationDesignation.$accountCreatee.getContact().getSalutation()", null, $locale) $accountCreatee.getContact().getFirstName() $accountCreatee.getContact().getLastName()
+#end
+#macro(noReply)
+=============[Note]=============
+This email is only for the delivery service. 
+Please do not reply to this mail.
+#end

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+	<context:component-scan base-package="link.thinkonweb"/>
+    <tx:annotation-driven proxy-target-class="true" />
+ 	<context:annotation-config/>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+ 	<bean id="countryCodeToStringConverter" class="link.thinkonweb.util.CountryCodeToStringConverter"/>
+	<bean id="stringToCountryCodeConverter" class="link.thinkonweb.util.StringToCountryCodeConverter">
+	    <constructor-arg ref="countryCodeDao" />
+	</bean>
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+	    	<list>
+	             <ref bean="countryCodeToStringConverter"/>
+	             <ref bean="stringToCountryCodeConverter"/>
+	    	</list>
+		</property>
+	</bean>
+	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+	    <property name="conversionService" ref="conversionService" />
+	</bean>
+	<!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" /> -->
+	 
+
+<!-- 	<bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="webBindingInitializer">
+			<ref bean="webBindingInitializer"/>
+		</property>
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
+			</list>
+		</property>
+	</bean> -->
+	
+	
+<!-- 	<bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<ref bean="webBindingInitializer"/>
+		</property>
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+				<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"></bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	</bean> -->
+	
+<!--  	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="useTrailingSlashMatch" value="false"></property>
+		<property name="order" value="0" />
+	</bean> -->
+	
+<!-- 	<bean id="contentNegotiatingResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManager">
+			<constructor-arg>
+			<bean class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+			<constructor-arg>
+			<map>
+			<entry key="json" value="application/json"/>
+			<entry key="xml" value="application/xml"/>
+			</map>
+			</constructor-arg>
+			</bean>
+			</constructor-arg>
+			</bean>
+		</property>
+	
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+			</list>
+		</property>
+	</bean>
+
+    
+	<bean id="resourceBundleResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="order" value="1" />
+		<property name="basename" value="/resources/views" />
+	</bean>
+	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="order" value="#{resourceBundleResolver.order+1}" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="simpleMappingExceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error/404ErrorHandler" />
+	</bean> -->
+</beans>

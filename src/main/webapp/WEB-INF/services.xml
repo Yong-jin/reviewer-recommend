@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/mvc/spring-mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<context:component-scan base-package="link.thinkonweb"/>
+    <tx:annotation-driven proxy-target-class="true" />
+ 	<context:annotation-config/>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- email -->
+ 	<bean id="emailService" class="link.thinkonweb.service.email.EmailServiceImpl" />
+ 		
+ 	<!-- journal -->
+ 	<bean id="journalConfigurationService" class="link.thinkonweb.service.journal.JournalConfigurationServiceImpl" />
+ 	<bean id="journalService" class="link.thinkonweb.service.journal.JournalServiceImpl"/>
+ 	<bean id="journalUserEditor" class="link.thinkonweb.service.journal.JournalUserEditor"/>
+ 	
+ 	<!-- manuscript -->
+ 	<bean id="coAuthorService" class="link.thinkonweb.service.manuscript.CoAuthorServiceImpl" />
+    <bean id="manuscriptService" class="link.thinkonweb.service.manuscript.ManuscriptServiceImpl" />
+    <bean id="fileService" class="link.thinkonweb.service.manuscript.FileServiceImpl" />
+    <bean id="manuscriptBuilder" class="link.thinkonweb.service.manuscript.ManuscriptBuilder" />
+    <bean id="reviewPreferenceService" class="link.thinkonweb.service.manuscript.ReviewPreferenceServiceImpl" />
+    <bean id="schedulerService" class="link.thinkonweb.service.manuscript.SchedulerServiceImpl" />
+    
+    <!-- roles -->
+    <bean id="associateEditorService" class="link.thinkonweb.service.roles.AssociateEditorServiceImpl" />
+    <bean id="chiefEditorService" class="link.thinkonweb.service.roles.ChiefEditorServiceImpl" />
+    <bean id="guestEditorService" class="link.thinkonweb.service.roles.GuestEditorServiceImpl" />
+    <bean id="boardMemberService" class="link.thinkonweb.service.roles.BoardMemberServiceImpl" />
+	<bean id="reviewerService" class="link.thinkonweb.service.roles.ReviewerServiceImpl" />
+    <bean id="managerService" class="link.thinkonweb.service.roles.ManagerServiceImpl" />
+    
+    <!-- user -->
+    <bean id="contactService" class="link.thinkonweb.service.user.ContactServiceImpl" />
+    <bean id="authorityService" class="link.thinkonweb.service.user.AuthorityServiceImpl" />
+	<bean id="userExpertiseService" class="link.thinkonweb.service.user.UserExpertiseServiceImpl" />
+    <bean id="userService" class="link.thinkonweb.service.user.UserServiceImpl" />
+    <bean id="systemUtil" class="link.thinkonweb.util.SystemUtil" />
+	<bean id="compressUtil" class="link.thinkonweb.util.CompressUtil" />
+    
+
+ 	<bean id="submitIdGenerator" class="link.thinkonweb.util.SubmitIdGenerator" />
+ 	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+ 	
+<!--  	<bean id="superManagerController" class="link.thinkonweb.controller.roles.SuperManagerController">
+ 		<constructor-arg ref="sessionRegistry" />
+ 	</bean> -->
+ 	
+ 	
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+   	<property name="resourceLoaderPath" value="/WEB-INF/classes/emails/"/>
+   	<property name="configLocation" value="/WEB-INF/classes/emails/velocity.properties" />
+     	<property name="velocityProperties">
+     	<props>
+       	<prop key="input.encoding">utf-8</prop>
+       </props>
+		</property>
+	</bean>
+	
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    	<property name="velocityProperties">
+     		<value>
+				resource.loader=class
+				class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+				velocimacro.permissions.allow.inline=true
+				velocimacro.permissions.allow.inline.to.replace.global=true
+				velocimacro.permissions.allow.inline.local.scope=true
+				velocimacro.library.autoreload=true
+				file.resource.loader.cache=false
+				class.resource.loader.cache=false
+				runtime.interpolate.string.literals=true
+				velocimacro.library.autoreload=true
+			</value>
+		</property>
+	</bean>
+</beans>

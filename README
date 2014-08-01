@@ -1,0 +1,265 @@
+1) 아래 문제 해결하
+HTTP Status 500 - Request processing failed; nested exception is org.springframework.dao.RecoverableDataAccessException: PreparedStatementCallback; SQL [SELECT * FROM USERS WHERE USERNAME = ?]; The last packet successfully received from the server was 324,248,799 milliseconds ago. The last packet sent successfully to the server was 324,248,800 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: The last packet successfully received from the server was 324,248,799 milliseconds ago. The last packet sent successfully to the server was 324,248,800 milliseconds ago. is longer than the server configured value of 'wait_timeout'. You should consider either expiring and/or testing connection validity before use in your application, increasing the server configured values for client timeouts, or using the Connector/J connection property 'autoReconnect=true' to avoid this problem.
+
+Warning: TableTools 2 requires DataTables 1.9.0 or newer - www.datatables.net/download
+
+Journal Manuscript Management System 
+
+계정 생성하는 곳
+1.회원가입 without/with 저널
+2.Coauthor
+3.Review Preference
+4.Manager가 Editorial Member 생성
+5.Reviewer 생성
+
+0. 알아두어야 할 링크
+1) http://www.istockphoto.com/ - 유료 이미지 다운로드 사이트 
+2) http://blog.daum.net/oneprimary/7 - 한글 Properties 관련 사이
+
+1. 로컬 설치시에 STS로 프로젝트 Import한 이후 다음과 같은 폴더 생성 필요
+
+1) WEB-INF/classes/images/ 폴더 밑에 직접 coverImages 폴더 생성 필요 
+2) /var/jms 폴더 생성 필요
+   sudo mkdir /var/jms
+3) 다음과 같이 권한 설정 
+   sudo chmod 777 /var/jms/
+
+
+2. metronic의 assets에 포함된 것 이외에 각자 수정하거나 새롭게 생성하는 css와 js 파일
+1) 커스텀 css
+   ${baseUrl}/css/custom.css 
+2) 커스텀 js 
+   ${baseUrl}/js/xxx.js 
+3) 이와 같이 외부에 작성하는 이유는 추후 metronic을 업데이트 할 때 그대로 덮어쓰기 위해서임
+ 
+ 
+3. Form submit를 ajax로 호출 
+ http://www.malsup.com/jquery/form/#api
+ 
+4. Spring에서 SQL의 LIKE 처리
+ 	@Override
+	@Transactional(readOnly=true)
+	public List<Journal> findByJournalTitle(String journalTitle) {
+		String sql = "SELECT * FROM JOURNALS WHERE TITLE LIKE ? COLLATE UTF8_GENERAL_CI";
+		journalTitle = "%" + journalTitle.trim() + "%";
+		List<Journal> journals = this.getJdbcTemplate().query(sql, new Object[] {journalTitle}, journalRowMapper);	
+		return journals;
+	} 
+		
+6.Eclipse 팁 정리
+ http://gyuha.tistory.com/289
+ http://atcode.org/encyclopedia/sts-ini/ (MAC)
+ 
+7. ROLE Definition
+- ROLE_ANONYMOUS
+본 시스템에 초기 접속했을 때의 ROLE
+로그인 상태에서 로그아웃했을 때의 ROLE
+
+- ROLE_USER
+본 시스템에 로그인 했을 때의 기본 ROLE
+모든 사용자에게 부여되는 ROLE
+
+- ROLE_SUPER_MANAGER
+본 시스템의 관리자 ROLE: yh21.han@gmail.com, yhhan@koreatech.ac.kr, cmdr@koreatech.ac.kr
+
+- ROLE_MANAGER
+저널의 관리자 ROLE
+저널의 생성자에게 기본적으로 부여됨
+
+- ROLE_MEMBER
+저널에 로그인했을 때의 기본 ROLE
+모든 사용자에게 부여되는 ROLE
+저널에 논문 제출 가능
+잠재적인 Author
+웹화면에서는 AUTHOR로 표기됨
+
+- ROLE_C-EDITOR
+저널의 주 편집 에디터 ROLE
+
+- ROLE_G-EDITOR
+저널의 초청 편집 에디터 ROLE
+
+- ROLE_A-EDITOR
+저널의 부 편집 에디터 ROLE
+
+- ROLE_B-MEMBER
+저널의 편집 위원 ROLE
+
+- ROLE_REVIEWER
+저널의 심사자 ROLE
+
+
+8. Status Definition
+
+1) 추가 리뷰를 허용할 경우 논문 Status 정리
+- EiC/Guest Editor가 곧바로 Reviewer를 선정하여 진행할 때
+B. Being submitted
+I. Submitted
+R. Under review
+D. Review result has been made & mailed to the author(s)
+V. Revised Paper has been received
+A. Accept
+M. Camera-ready paper has been received
+G. Gallery Proofs Ready
+P. Published
+J. Reject
+W. Withdrawn
+
+시나리오 1. 논문이 첫번째 라운드에 Accept or Reject 되었을 때 (Note: C 단계 진입 없음) 
+B -> I -> R -> A -> M -> P
+B -> I -> R -> J
+
+시나리오 2. 논문이 두번째 라운드에 Accept or Reject 되었을 때
+B -> I -> R -> [D -> V -> R] -> A -> M -> P
+B -> I -> R -> [D -> V -> R] -> J
+
+시나리오 3. 논문이 n번째 라운드에 Accept or Reject 되었을 때
+B -> I -> R -> [D -> V -> R] -> [D -> V -> R] -> ... [D -> V -> R] -> A -> M -> P
+B -> I -> R -> [D -> V -> R] -> [D -> V -> R] -> ... [D -> V -> R] -> J
+
+시나리오 4. 논문이 n번째 라운드에 들어가서 저자가 기한 내에 논문 제출을 안했을 때
+B -> I -> R -> [D -> V -> R] -> [D -> V -> R] -> ... [D] -> X
+
+기타.
+B 상태에서는 저자가 제출하는 논문을 삭제할 수 있음 (데이터베이스에서 정보 삭제)
+S부터 X상태까지는 언제든지 저자가 W 상태로 바꿀 수 있음 (데이터베이스에 정보 유지)  
+
+
+
+
+- EiC가 A.E.를 선정하여 진행할 때 (A.E 선정을 누가 할 것인가? 기본: Manager가 지정, EiC가 확정)
+system.titleB=Paper being submitted
+system.titleI=Submitted
+system.titleO=Associate editor selected
+system.titleR=Under Review
+system.titleE=Review results made and reported to the chief editor
+system.titleD=Review results mailed to the authors
+system.titleV=Revised Paper submitted
+system.titleA=Accepted
+system.titleM=Camera-ready paper submitted
+system.titleP=Published
+system.titleJ=Rejected
+system.titleG=Gallery Proofs Ready
+system.titleW=Withdrawn
+
+시나리오 1. 논문이 첫번째 라운드에 Accept or Reject 되었을 때 (Note: C 단계 진입 없음) 
+B -> I -> (O) -> R -> (E) -> A -> M -> P
+B -> I -> (O) -> R -> (E) -> J
+
+시나리오 2. 논문이 두번째 라운드에 Accept or Reject 되었을 때
+B -> I -> (O) -> R -> (E) -> [D -> V -> R -> (E)] -> A -> M -> P
+B -> I -> (O) -> R -> (E) -> [D -> V -> R -> (E)] -> J
+
+시나리오 3. 논문이 n번째 라운드에 Accept or Reject 되었을 때
+B -> I -> (O) -> R -> (E) -> [D -> V -> R -> (E)] -> [D -> V -> R -> (E)] -> ... -> [D -> V -> R -> (E)] -> A -> M -> P
+B -> I -> (O) -> R -> (E) -> [D -> V -> R -> (E)] -> [D -> V -> R -> (E)] -> ... -> [D -> V -> R -> (E)] -> J
+
+시나리오 4. 논문이 n번째 라운드에 들어가서 저자가 기한 내에 논문 제출을 안했을 때
+B -> I -> (O) -> R -> (E) -> [D -> V -> R -> (E)] -> [D -> V -> R -> (E)] -> ... -> [D] -> X
+
+기타.
+B 상태에서는 저자가 제출하는 논문을 삭제할 수 있음 (데이터베이스에서 정보 삭제)
+S부터 X상태까지는 언제든지 저자가 W 상태로 바꿀 수 있음 (데이터베이스에 정보 유지)  
+
+
+
+2) 추가 리뷰를 허용하지 않을 경우 논문 Status 정리
+- EiC/Guest Editor가 곧바로 Reviewer를 선정하여 진행할 때
+B. Being submitted
+I. Submitted
+R. Under review
+A. Accept
+M. Camera-ready paper has been received
+P. Published
+J. Reject
+W. Withdrawn
+
+시나리오 1.
+B -> I -> R -> A -> M -> P 
+B -> I -> R -> j 
+
+
+- A.E.를 선정하여 진행할 때 (A.E 선정을 누가 할 것인가? 기본: Manager가 지정, EiC가 확정)
+B. Being submitted
+I. Submitted
+O. Associate editor is being selected
+R. Under review
+E. Evaluation has been completed
+A. Accept
+M. Camera-ready paper has been received
+P. Published
+J. Reject
+W. Withdrawn
+ 
+ 시나리오 1.
+B -> I -> (O) -> R -> (E) -> A -> M -> P 
+B -> I -> (O) -> R -> (E) -> J
+
+B -> I -> (O) -> R -> (E) -> J
+
+
+9. Review Status Definition (per Manuscript)
+
+I. Invited
+A. Assigned
+R. Under Review
+C. Review Completed
+D. Declined
+M. Dismissed
+
+
+10. 참고
+http://tomcat.apache.org/tomcat-7.0-doc/config/http.html#Connector Comparison
+
+Session Management
+http://itbruce.tistory.com/204
+
+DB 변경
+- Dump2014-recent.sql: 이곳에 최신 버전을 올려 놓자. Dump2014-recent.sql 파일 하단부에 수정한 날짜 및 시각을 Manual 하게 직접 적어도 되고 아니면 Dump 해 오면 자동으로 적히게끔 하자.
+- Dump2014-initial.sql: 기본 Scheme만 있는 데이터.
+- Dump2014-initial.sql: 기본 Scheme + 필수 멤버, JIPS, Country 데이터만 있는 파일.
+
+[Author 탭 메뉴 이름] (저자 누구나 수정 및 액션 가능)
+Papers Being Submitted - B (Datatable 컬럼에 Submitter 필요)
+Papers Submitted - I, O, R, E, D, V (event date를 기준으로 정렬) (Datatable 컬럼에 Submitter 필요)
+Papers Accepted for Publication - A, M, G, P (Datatable 컬럼에 Submitter 필요) (submittor, coauthor)
+Papers Rejected or Withdrawn - J, W (Datatable 컬럼에 Submitter 필요) (submittor, coauthor)
+
+[Manager 탭 메뉴 이름]
+Papers Being Submitted - B
+Papers Submitted - I, V
+Papers Accepted for Publication - A, M, G, P
+Papers in Review - O, R, E, D
+Papers Rejected or Withdrawn - J, W
+
+[Chief Editor 탭 메뉴 이름] (B 상태 논문 안보임)
+Papers Submitted - I, V
+Papers Required for AE Selection - O
+Papers in Review - R
+Papers Required for Final Decision - E
+Papers in Other Status - J, W, D, A, M, G, P
+
+[Guest Editor 탭 메뉴 이름] - [주의] 자신에게 할당된 논문만 보여짐 (B, I, V, E 상태 논문 안보임) 
+Papers Required for Review Process - O, R
+Papers Required for Re-Review Process - R
+Papers in Other Status - J, W, D, A, M, G, P
+
+[Associate Editor 탭 메뉴 이름] - [주의] 자신에게 할당된 논문만 보여짐 (B, I, V 상태 논문 안보임) 
+Papers Required for Review Process - O, R
+Papers Required for Re-Review Process - R
+Papers in Other Status - J, W, E, D, A, M, G, P
+
+[Board Member 탭 메뉴 이름]
+Papers Accepted for Publication - A, M, G, P
+Papers Rejected or Withdrawn - J, W
+
+[Reviewer 탭 메뉴 이름] - [주의] 자신에게 할당된 논문만 보여짐 (B, I, O 상태 논문 안보임)  
+Papers Assigned - R
+Papers Reviewed - E, D, V, A, M, G, P, J, W
+
+
+SeungIl Hyeon	오전 11:56
+https://km.paygate.net/pages/viewpage.action?pageId=720986
+https://km.paygate.net/pages/viewpage.action?pageId=721306
+페이게이트 결제연동 샘플페이지
+https://api.paygate.net/orderforms/order.html

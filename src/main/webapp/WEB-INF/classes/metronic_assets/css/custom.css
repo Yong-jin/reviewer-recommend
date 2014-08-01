@@ -1,0 +1,57 @@
+/* here you can put your own css to customize and override the theme */
+
+.login {
+  background-color: #86A3EC !important;
+  /*background-image: url('/css/yhhan/corporate/img/sliders/revolution/bg7.jpg');
+  background-size:100% 200%;
+  background-repeat:no-repeat;*/
+}
+
+body.signupIFrame {
+  background-color: #FFFFFF !important;	
+}
+
+span.logo_first {
+	font-family:'Open Sans', sans-serif;
+	font-size:1.6em;
+	font-weight:bold;
+	color:#33CCFF;
+}
+
+span.logo_second {
+	font-family:'Open Sans', sans-serif;
+	font-size:1.6em;
+	font-weight:bold;
+	color:#808080;
+}
+
+span.logo_first_small {
+	font-family:'Open Sans', sans-serif;
+	font-size:1.0em;
+	font-weight:bold;
+	color:#ffffff;
+}
+
+span.logo_second_small {
+	font-family:'Open Sans', sans-serif;
+	font-size:1.0em;
+	font-weight:bold;
+	color:#ff0000;
+}
+
+
+
+.portlet > .portlet-title > .caption {
+  float: left;
+  display: inline-block;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 8px; 
+}
+
+.divider {
+	margin-bottom: 100px;
+}

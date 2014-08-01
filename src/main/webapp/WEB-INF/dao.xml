@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/mvc/spring-mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<context:component-scan base-package="link.thinkonweb"/>
+    <tx:annotation-driven proxy-target-class="true" />
+ 	<context:annotation-config/>
+ 	<tx:annotation-driven transaction-manager="transactionManager" />
+
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource"/>
+	</bean>
+    <bean id="jdbcTemplate"
+	    class="org.springframework.jdbc.core.JdbcTemplate"
+	    p:dataSource-ref="dataSource"/> 
+
+	<!-- user -->
+    <bean id="autorityDao" class="link.thinkonweb.dao.user.AuthorityDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="authorityRowMapper" class="link.thinkonweb.dao.user.AuthorityRowMapper" />
+    <bean id="changePasswordCodeDao" class="link.thinkonweb.dao.user.ChangePasswordCodeDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="contactDao" class="link.thinkonweb.dao.user.ContactDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="contactRowMapper" class="link.thinkonweb.dao.user.ContactRowMapper">
+    	<constructor-arg ref="countryCodeDao" />
+    </bean>
+    <bean id="countryCodeDao" class="link.thinkonweb.dao.user.CountryCodeDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="countryCodeRowMapper" class="link.thinkonweb.dao.user.CountryCodeRowMapper" />
+    
+	<bean id="userContactRowMapper" class="link.thinkonweb.dao.user.UserContactRowMapper" />
+
+    <bean id="userDao" class="link.thinkonweb.dao.user.UserDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="userRowMapper" class="link.thinkonweb.dao.user.UserRowMapper" />
+    
+    <bean id="userExpertiseDao" class="link.thinkonweb.dao.user.UserExpertiseDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="userExpertiseRowMapper" class="link.thinkonweb.dao.user.UserExpertiseRowMapper" />
+    
+     
+    
+    <!-- manuscript -->
+    <bean id="manuscriptDao" class="link.thinkonweb.dao.manuscript.ManuscriptDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="manuscriptRowMapper" class="link.thinkonweb.dao.manuscript.ManuscriptRowMapper"/>
+    <bean id="manuscriptEventDateTimeRowMapper" class="link.thinkonweb.dao.manuscript.ManuscriptEventDateTimeRowMapper"/>
+    <bean id="manuscriptStatisticsRowMapper" class="link.thinkonweb.dao.manuscript.ManuscriptStatisticsRowMapper"/>
+	<bean id="abstractDao" class="link.thinkonweb.dao.manuscript.AbstractDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="abstractRowMapper" class="link.thinkonweb.dao.manuscript.AbstractRowMapper"/>
+    
+	<bean id="coAuthorDao" class="link.thinkonweb.dao.manuscript.CoAuthorDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="coAuthorRowMapper" class="link.thinkonweb.dao.manuscript.CoAuthorRowMapper"/>
+    
+	<bean id="coverLetterDao" class="link.thinkonweb.dao.manuscript.CoverLetterDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="coverLetterRowMapper" class="link.thinkonweb.dao.manuscript.CoverLetterRowMapper"/>
+    
+    <bean id="eventDateTimeDao" class="link.thinkonweb.dao.manuscript.EventDateTimeDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="eventDateTimeRowMapper" class="link.thinkonweb.dao.manuscript.EventDateTimeRowMapper" />
+    
+    <bean id="finalDecisionDao" class="link.thinkonweb.dao.manuscript.FinalDecisionDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="runningHeadDao" class="link.thinkonweb.dao.manuscript.JdbcRunningHeadDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="titleDao" class="link.thinkonweb.dao.manuscript.JdbcTitleDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<bean id="keywordDao" class="link.thinkonweb.dao.manuscript.KeywordDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="keywordRowMapper" class="link.thinkonweb.dao.manuscript.KeywordRowMapper" />
+    
+    <bean id="reviewDao" class="link.thinkonweb.dao.manuscript.ReviewDaoImpl" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="reviewRowMapper" class="link.thinkonweb.dao.manuscript.ReviewRowMapper" />
+    
+    <bean id="reviewerSuggestDao" class="link.thinkonweb.dao.manuscript.ReviewerSuggestDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<bean id="reviewEventDateTimeDao" class="link.thinkonweb.dao.manuscript.ReviewEventDateTimeDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="reviewEventDateTimeRowMapper" class="link.thinkonweb.dao.manuscript.ReviewEventDateTimeRowMapper" />
+    <bean id="reviewManuscriptRowMapper" class="link.thinkonweb.dao.manuscript.ReviewManuscriptRowMapper" />
+    <bean id="reviewPreferenceDao" class="link.thinkonweb.dao.manuscript.ReviewPreferenceDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="reviewRequestDao" class="link.thinkonweb.dao.manuscript.ReviewRequestDao">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="uploadedFileDao" class="link.thinkonweb.dao.manuscript.UploadedFileDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="uploadedFileRowMapper" class="link.thinkonweb.dao.manuscript.UploadedFileRowMapper"/>
+    
+	<bean id="commentDao" class="link.thinkonweb.dao.manuscript.form.CommentDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="commentRowMapper" class="link.thinkonweb.dao.manuscript.form.CommentRowMapper"/>
+    
+	<!-- journal -->
+    <bean id="journalDao" class="link.thinkonweb.dao.journal.JournalDaoImpl">
+    	<property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <bean id="journalRowMapper" class="link.thinkonweb.dao.journal.JournalRowMapper" />
+	
+	<bean id="categoryDao" class="link.thinkonweb.dao.journal.CategoryDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="categoryRowMapper" class="link.thinkonweb.dao.journal.CategoryRowMapper" />
+    
+	<bean id="journalConfigurationDao" class="link.thinkonweb.dao.journal.JournalConfigurationDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="journalConfigurationRowMapper" class="link.thinkonweb.dao.journal.JournalConfigurationRowMapper" />
+    
+	<bean id="journalCategoryDao" class="link.thinkonweb.dao.journal.JournalCategoryDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="journalCategoryRowMapper" class="link.thinkonweb.dao.journal.JournalCategoryRowMapper" />
+    <bean id="journalUploadedFileDao" class="link.thinkonweb.dao.journal.JournalUploadedFileDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="journalUploadedFileRowMapper" class="link.thinkonweb.dao.journal.JournalUploadedFileRowMapper"/>
+    
+    <bean id="journalUserContactRowMapper" class="link.thinkonweb.dao.journal.JournalUserContactRowMapper" />
+    <bean id="specialIssueDao" class="link.thinkonweb.dao.journal.SpecialIssueDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="divisionDao" class="link.thinkonweb.dao.journal.DivisionDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="divisionRowMapper" class="link.thinkonweb.dao.journal.DivisionRowMapper" />
+    
+    <bean id="guestEditorSpecialIssueDao" class="link.thinkonweb.dao.journal.GuestEditorSpecialIssueDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="guestEditorSpecialIssueRowMapper" class="link.thinkonweb.dao.journal.GuestEditorSpecialIssueRowMapper" />
+    <bean id="guestEditorSpecialIssueSpecialIssueRowMapper" class="link.thinkonweb.dao.journal.GuestEditorSpecialIssueSpecialIssueRowMapper" />
+    <bean id="submittedManuscriptDao" class="link.thinkonweb.dao.journal.JdbcSubmittedManuscriptDao" >
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="specialIssueRowMapper" class="link.thinkonweb.dao.journal.SpecialIssueRowMapper" />
+    <bean id="userDivisionDao" class="link.thinkonweb.dao.journal.UserDivisionDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+	
+	<bean id="userDivisionRowMapper" class="link.thinkonweb.dao.journal.UserDivisionRowMapper" />
+	<bean id="userDivisionDivisionRowMapper" class="link.thinkonweb.dao.journal.UserDivisionDivisionRowMapper" />
+
+	
+	<!-- email -->
+	<bean id="emailDeliveryDao" class="link.thinkonweb.dao.email.EmailDeliveryDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<bean id="emailMessageDao" class="link.thinkonweb.dao.email.EmailMessageDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="emailMessageRowMapper" class="link.thinkonweb.dao.email.EmailMessageRowMapper" />
+    <bean id="emailDeliveryRowMapper" class="link.thinkonweb.dao.email.EmailDeliveryRowMapper" />
+    <bean id="emailDeliveryEmailMessageRowMapper" class="link.thinkonweb.dao.email.EmailDeliveryEmailMessageRowMapper" />
+    
+    <!-- roles -->
+    <bean id="journalRoleDao" class="link.thinkonweb.dao.roles.JournalRoleDaoImpl">
+			<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="journalMemberRowMapper" class="link.thinkonweb.dao.roles.JournalMemberRowMapper" />
+    <bean id="journalReviewerRowMapper" class="link.thinkonweb.dao.roles.JournalReviewerRowMapper" />
+    <bean id="journalAssociateEditorRowMapper" class="link.thinkonweb.dao.roles.JournalAssociateEditorRowMapper" />
+    <bean id="journalChiefEditorRowMapper" class="link.thinkonweb.dao.roles.JournalChiefEditorRowMapper" />
+    <bean id="journalGuestEditorRowMapper" class="link.thinkonweb.dao.roles.JournalGuestEditorRowMapper" />
+    <bean id="journalManagerRowMapper" class="link.thinkonweb.dao.roles.JournalManagerRowMapper" />
+    <bean id="journalBoardMemberRowMapper" class="link.thinkonweb.dao.roles.JournalBoardMemberRowMapper" />
+    
+    <bean id="databaseInfo" class="link.thinkonweb.util.DatabaseInfo">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    
+</beans>

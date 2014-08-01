@@ -1,0 +1,831 @@
+##GREETING
+#if ($mailId == 1)
+저널 관리자님,
+
+#elseif ($toRole == "AU")
+#if (${toEmail})
+$systemUtil.trim("#authorName") 논문 저자분께,
+
+#else
+논문 저자분께,
+
+#end
+#elseif ($toRole == "MA")
+$systemUtil.trim("#managerName") 저널 관리자님,
+
+#elseif ($toRole == "CE")
+$systemUtil.trim("#chiefEditorName") 편집장님,
+
+#elseif ($toRole == "AE")
+$systemUtil.trim("#associateEditorName") 부편집장님,
+
+#elseif ($toRole == "GE")
+$systemUtil.trim("#guestEditorName") 초청 편집장님,
+
+#elseif ($toRole == "RV")
+$systemUtil.trim("#reviewerName") 심사위원님,
+
+#elseif ($toRole == "OW")
+$systemUtil.trim("#accountCreatorName") 회원님,
+
+#elseif ($toRole == "TE")
+$systemUtil.trim("#accountCreateeName") 회원님,
+
+#end
+##INTRO
+#if ($mailId == 0 || $mailId == 4 || $mailId == 6)
+${journal.title}에 다음 신규 논문을 제출하여 주셔서 감사합니다.
+#elseif ($mailId == 1)
+${journal.title}에 다음 신규 논문이 제출되었습니다.
+#elseif ($mailId == 2 || $mailId == 5 || $mailId == 7)
+${journal.title}에 이전 심사 결과를 참고하여 수정하신 다음 논문을 제출하여 주셔서 감사합니다.
+#elseif ($mailId == 3)
+${journal.title}에 이전 심사 결과를 참고하여 수정된 다음 논문이 제출되었습니다.
+#elseif ($mailId == 8 && $manuscriptTrackId == 0)
+${journal.title}에 다음의 신규 논문이 제출되었으며 저널 관리자에 의해 제출 승인이 되었습니다.
+#elseif ($mailId == 8 && $manuscriptTrackId == 1)
+${journal.title}에 다음의 신규 논문이 스페셜 이슈 트랙으로 제출되었으며 저널 관리자에 의해 제출 승인이 되었습니다.
+#elseif ($mailId == 9)
+${journal.title}에 이전 심사 결과를 참고하여 수정된 다음 논문이 제출되었으며 저널 관리자에 의해 제출 승인이 되었습니다.
+#elseif ($mailId == 10 || $mailId == 11)
+${journal.title}에 다음의 신규 논문이 제출되었으며 저널 관리자에 의해 제출 승인이 되었습니다.
+#elseif ($mailId == 12)
+${journal.title}에 제출된 다음 신규 논문에 대해 편집장께서 의뢰하신 논문 심사 진행을 부편집장님이 수락하였습니다.
+#elseif ($mailId == 13)
+${journal.title}에 제출된 다음 신규 논문에 대해 편집장께서 의뢰하신 논문 심사 진행을 부편집장님이 거절하였습니다.
+#elseif ($mailId == 14 || $mailId == 15)
+최근에 ${journal.title}에 제출된 다음 신규 논문의 심사 진행을 부편집장께 의뢰하였습니다.
+#elseif ($mailId == 16 || $mailId == 22)
+최근에 ${journal.title}에 제출된 다음 논문에 대해 논문 심사위원으로 초빙합니다.
+#elseif ($mailId == 17)
+최근에 ${journal.title}에 제출된 다음 논문에 대해
+#elseif ($mailId == 18 || $mailId == 19)
+최근에 ${journal.title}에 제출된 다음 논문에 대한 논문 심사를 심사위원님께 할당드립니다.
+#elseif ($mailId == 20 || $mailId == 21)
+최근에 ${journal.title}에 제출된 다음 논문에 대한 논문 심사위원 초빙을 수락해 주셔서 감사합니다.
+#elseif ($mailId == 23 || $mailId == 24)
+최근에 ${journal.title}에 제출된 다음 논문에 대해 논문 심사위원으로 초빙하였습니다.
+#elseif ($mailId == 25)
+최근에 ${journal.title}에 제출된 다음 논문에 대해 논문 심사를 완료해 주셔서 감사합니다.
+#elseif ($mailId == 26 || $mailId == 27 || $mailId == 28)
+최근에 ${journal.title}에 제출된 다음 논문에 대해 논문 심사를 심사위원님께 할당해 드렸습니다.
+#elseif ($mailId == 29)
+${journal.title}에 제출된 다음 논문에 대해 총 #reviewCompleteCount분의 심사위원님께서 논문 심사를 완료해 주셨습니다.
+#elseif ($mailId == 30)
+${journal.title}에 제출된 다음 논문에 대해 $systemUtil.trim("#associateEditorName") 부편집장님이 심사위원들의 논문 결과를 취합하여 논문 심사 진행을 완료하셨습니다.
+#elseif ($mailId == 31)
+축하드립니다. ${journal.title}에 제출된 다음 논문이 [reviewDecision]되었습니다.
+#elseif ($mailId == 32 || $mailId == 33)
+${journal.title}에 제출하신 다음 논문에 대하여 논문 심사 결과를 전해드립니다.
+#elseif ($mailId == 34 || $mailId == 35)
+${journal.title}에 제출하신 다음 논문에 대하여 심사 결과를 전해드리면서 수정 논문 제출을 요청하였습니다.
+#elseif ($mailId == 36)
+저자분들이 ${journal.title}에 제출한 다음 논문에 대하여 논문 심사 결과를 참고하여 수정 논문 제출을 준비중입니다.
+#elseif ($mailId == 37)
+${journal.title}에 제출하신 다음 논문에 대하여 수정 논문 제출 기한 연장 요청을 승인합니다.
+#elseif ($mailId == 38)
+최근에 저자분들께서 ${journal.title}에 제출하신 다음 논문에 대하여 수정 논문 제출 기한 연장 요청을 하셨습니다.
+#elseif ($mailId == 39)
+${journal.title}에 제출하신 다음 논문에 대하여 논문 심사 완료 전 편집위원분들의 사전 판단 결과를 전해드립니다.
+#elseif ($mailId == 40 || $mailId == 41)
+최근에 ${journal.title}에 게재 수락된 다음 논문에 대하여 출판용 논문 (Camera-ready Paper) 제출을 요청하였습니다.
+#elseif ($mailId == 42)
+${journal.title}에 게재 수락된 다음 출판용 논문을 제출하여 주셔서 감사합니다.
+#elseif ($mailId == 43)
+${journal.title}에 게재 수락된 다음 출판용 논문이 제출되었습니다.
+#elseif ($mailId == 44)
+최근에 저자분께서는 ${journal.title}에 게재 수락된 다음 출판용 논문을 제출하셨습니다.
+#elseif ($mailId == 45)
+${journal.title}에 게재 수락된 다음 출판용 논문을 검토한 결과 조판 인쇄용 (Gallery Proofs) 논문을 만드는 데 문제가 없다고 판단되어 이와 같이 제출 승인 안내를 보내드립니다.
+#elseif ($mailId == 46)
+${journal.title}에 게재 수락된 다음 조판 인쇄용 (Gallery Proofs) 논문이 준비되어 저자분들께 확인 요청을 드립니다.
+#elseif ($mailId == 47)
+${journal.title}에 게재 수락된 다음 조판 인쇄용 (Gallery Proofs) 논문에 대해 저자분들이 수정을 요청하셨습니다.
+#elseif ($mailId == 48)
+${journal.title}에 게재 수락된 다음 조판 인쇄용 (Gallery Proofs) 논문에 대해 저자분들이 최종 승인을 하셨습니다.
+#elseif ($mailId == 49)
+온라인 논문 제출 및 심사 서비스를 제공하는 ManuscriptLink (http://www.manuscriptlink.com)에 회원님의 계정이 생성되었음을 알려드립니다. 
+#elseif ($mailId == 50)
+${journal.title}의 다음 온라인 논문 제출 및 심사 서비스에 회원님의 계정이 생성되었음을 알려드립니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 51)
+${journal.title}의 다음 온라인 논문 제출 및 심사 서비스에 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+$systemUtil.trim("#accountCreateeName") 회원님의 계정을 다음의 공동 논문 저자께서 논문 제출을 위하여 생성하였음을 알려드립니다.
+
+계정 생성 공동 논문 저자: $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 52)
+${journal.title}의 다음 온라인 논문 제출 및 심사 서비스에 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+$systemUtil.trim("#accountCreateeName") 회원님의 계정을 다음의 저널 관리자께서 편집위원으로 위촉하기 위하여 생성하였음을 알려드립니다.
+
+계정 생성 저널 관리자: $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 53)
+${journal.title}의 다음 온라인 논문 제출 및 심사 서비스에 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+$systemUtil.trim("#accountCreateeName") 회원님의 계정을 다음의 저널 편집위원께서 심사위원으로 위촉하기 위하여 생성하였음을 알려드립니다.
+
+계정 생성 편집위원: $systemUtil.trim("#accountCreatorName") ($accountCreator.getUsername())
+#elseif ($mailId == 54)
+안녕하세요. 
+
+ManuscriptLink (http://www.manuscriptlink.com)에서 관리되는 회원님의 비밀번호 변경 URL은 다음과 같습니다.
+[passwordChangeUrl]
+
+위 주소에 접속하셔서 비밀번호를 새로 설정하시기 바랍니다.
+#end
+##MANUSCRIPT_SUMMARY
+#if ($mailId == 0 || $mailId == 1 || $mailId == 4)
+
+#manuscriptSummaryWithSubmissionDateWithoutSubmitId
+#elseif ($mailId == 11 || $mailId == 15)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdWithoutRequest
+#elseif ($mailId == 2 || $mailId == 3 || $mailId == 5 || $mailId == 6 || $mailId == 7 || $mailId == 8 || $mailId == 9 || $mailId == 10 || $mailId == 12 || $mailId == 13 || $mailId == 14 || $mailId == 29 || $mailId == 30 || $mailId == 31 || $mailId == 32 || $mailId == 33 || $mailId == 39)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitId
+#elseif ($mailId == 16 || $mailId == 17 || $mailId == 18 || $mailId == 19 || $mailId == 20 || $mailId == 21 || $mailId == 22 || $mailId == 23 || $mailId == 24 || $mailId == 25 || $mailId == 26 || $mailId == 27 || $mailId == 28)
+
+#manuscriptSummaryToReviewer
+#elseif ($mailId == 34 || $mailId == 35 || $mailId == 40 || $mailId == 41)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateWithoutRequest
+#elseif ($mailId == 36 || $mailId == 37 || $mailId == 38)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDate
+#elseif ($mailId == 42 || $mailId == 43 || $mailId == 44 || $mailId == 45 || $mailId == 46 || $mailId == 47 || $mailId == 48)
+
+#manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDate
+#end
+##BODY
+#if ($mailId == 0)
+수일 내에 저널 관리자가 제출하신 위 논문을 검토한 이후에 정식 논문 ID를 포함한 논문 접수 승인 메일을 보내드릴 것입니다. 추후 논문에 대한 심사 진행 상태는 다음 온라인 시스템을 통해서도 확인할 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+제출하신 논문에 대한 추가적인 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 1)
+다음의 온라인 논문 제출 및 심사 시스템에 접속하여 제출된 논문을 검토하신 후 승인을 해주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 3)
+다음의 온라인 논문 제출 및 심사 시스템에 접속하여 제출된 논문을 검토하신 후 승인을 해주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 2) 
+제출하신 논문을 검토한 이후에 수일 내에 논문 접수 승인 메일을 보내드리겠습니다. 추후 논문에 대한 심사 진행 상태는 다음 온라인 시스템을 통해서도 확인할 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+제출하신 논문에 대한 추가적인 질문이 있다면 담당 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 4 || $mailId == 5) 
+하지만, 제출하신 논문 및 관련 정보에 아래와 같은 문제가 있어서 논문 심사를 진행하기 어렵습니다.
+
+[comments]
+
+위에 기술된 사항들을 고려하여 논문을 수정하신 후 다음 온라인 시스템을 통해 논문을 다시 제출하여 주시길 바랍니다. 제출하신 수정 논문을 검토한 이후에 수일 내에 정식 논문 접수 통보메일을 보내드리겠습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+수정 논문 제출시에는 신규 논문으로 접수하지 마시고 기존에 제출하신 논문 접수 화면에서 새로운 논문 파일을 업로드하여 제출 버튼을 눌러주세요.
+
+만약 추가적인 질문이 있다면 담당 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 6 || $mailId == 7) 
+위 논문은 정식으로 ${journal.title}에 제출 승인되었습니다. 위 논문의 모든 저자분(들)이 논문 내용에 완벽하게 동의하며, 위 논문의 내용이 다른 곳에 출판된 적이 없다는 전제하에 본 저널 심사 절차를 진행하여 심사 결과를 통보해 드리겠습니다. 
+
+저자분께서는 향후 논문 심사 과정을 다음의 온라인 시스템에서 확인하실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+제출하신 논문에 대한 추가적인 질문이 있다면 담당 저널 관리자에게 반드시 논문 ID와 제목을 함께 알려주시면서 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 8) 
+편집장님께서는 다음의 온라인 시스템을 활용하여 제출된 논문에 대한 심사 절차를 진행해 주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 9) 
+부편집장님께서는 다음의 온라인 시스템을 활용하여 제출된 수정 논문에 대하여 심사위원을 선정하여 심사 절차를 진행해 주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 10 || $mailId == 11) 
+이후 다음 온라인 시스템을 활용하여 위 제출 논문에 대한 심사위원을 선정하여 심사 절차를 진행해 주실 것을 부편집장님께 의뢰드립니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+위 온라인 시스템에 로그인한 후 좀 더 자세한 논문 정보를 보시고 본 의뢰에 대한 수락 여부를 결정해 주시기 바랍니다.
+
+[Additional message from the chief editor]
+[comments]
+
+감사합니다.
+#elseif ($mailId == 12)
+논문 심사 관리 요청을 수락하신 부편집장: $systemUtil.trim("#associateEditorName") ($systemUtil.trim("#associateEditorEmail"))
+
+감사합니다. 
+#elseif ($mailId == 13) 
+논문 심사 관리 요청을 거절하신 부편집장: [aeName] ([aeEmail])
+
+부편집장님이 전달하는 거절 이유: [decline reason]
+[comments]
+
+의뢰하신 이번 논문 심사 관리는 다른 부편집장에게 의뢰해 주시길 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 14) 
+하지만, 해당 논문 심사 관리 요청을 취소하고 본 논문은 다른 부편집장님께 심사 관리를 요청하겠습니다.
+
+다음에 다른 논문에 대해 심사 관리 요청을 드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 15) 
+하지만, 아직까지 부편집장님께 심사 관리 수락 및 거절에 관한 응답을 듣지 못하였습니다.
+
+부편집장님께서 매우 바쁜것으로 생각하며 논문 심사 관리 요청을 취소하고 본 논문은 다른 부편집장님께 심사 관리를 요청하겠습니다.
+
+다음에 다른 논문에 대해 심사 관리 요청을 드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 16 || $mailId == 22) 
+많이 바쁘시겠지만 위 논문의 연구 주제가 심사위원님의 연구 분야와 비슷하다고 생각되어 이렇게 논문 심사를 의뢰드립니다. 논문 심사 기간은 심사 수락 후 [durationReviewByWeeks]주 입니다.
+
+제출 논문의 초록은 본 메일의 하단에 덧붙였습니다. 초록을 읽어 보시고 아래 URL을 클릭하여 심사 수락 및 거절에 대한 통보를 보내주십시오. 만약 논문의 주제가 심사위원님의 연구 분야와 맞지 않다거나 다른 일로 바쁘셔서 심사가 불가능하시다면 다른 적임자를 추천해 주시면 감사하겠습니다.
+
+논문 심사 수락/거절 URL: [reviewInviteUrl]
+
+심사 초빙을 수락해주셔서 좋은 심사를 부탁드립니다. 심사위원님의 심사는 저널의 가치를 높이는 데 많은 도움이 될 것입니다.
+
+감사합니다.
+#elseif ($mailId == 17) 
+아래 심사위원님께서 심사 초빙 거절을 하였습니다.
+
+이름: $systemUtil.trim("#reviewerName")
+이메일: ${toEmail}
+심사 초빙 거절 이유: [reviewInviteRejectReason]
+
+다른 심사위원분에게 위 논문의 심사 요청을 다시 하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 18 || $mailId == 20 || $mailId == 27) 
+아래 온라인 시스템에 로그인하여 제출 논문의 심사를 진행하시고 심사 결과를 [dueDate]까지 제출해 주십시오.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+비밀번호를 모르신다면 위 온라인 시스템에서 "비밀번호 찾기"를 클릭하셔서 로그인시 사용하는 이메일 (${toEmail})을 입력하시면 됩니다.
+
+감사합니다.
+#elseif ($mailId == 19 || $mailId == 21) 
+아래 온라인 시스템에 로그인하여 제출 논문의 심사를 진행하시고 심사 결과를 [dueDate]까지 제출해 주십시오.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+ 
+비밀번호를 포함한 계정 정보 안내 메일은 별도로 전달하였습니다. 위 시스템에 로그인 하신 후 '개인 프로파일 > 개인 정보 > 패스워드 변경'에서 비밀번호를 변경하실 수 있습니다.  
+
+감사합니다.
+#elseif ($mailId == 23) 
+하지만, 해당 논문 심사 요청을 취소하고 본 논문은 다른 심사위원분께 심사를 요청하겠습니다.
+
+다음에 다른 논문에 대해 심사 요청을 드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 24) 
+하지만, 아직까지 심사위원님께 심사 초빙 수락 및 거절에 관한 응답을 듣지 못하였습니다.
+
+심사위원님께서 매우 바쁜것으로 생각하며 논문 심사 요청을 취소하고 본 논문은 다른 심사위원분께 심사를 요청하겠습니다.
+
+다음에 다른 논문에 대해 심사 요청을 드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 25)
+심사위원님의 심사 내용은 저널의 가치를 높이고 저자분들의 향후 연구에 많은 도움이 될 것입니다.
+
+감사합니다.
+#elseif ($mailId == 26)
+현재 논문 심사를 진행중이실 것으로 생각되는데, 해당 논문의 심사가 이미 완료되었거나 도중에 다른 이유로 심사 절차가 중단되었기 때문에 죄송하지만 논문 심사 결과를 제출하지 않으셔도 됩니다.
+
+다음 기회에 다른 논문에 대해 심사를 다시 요청드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 28)
+논문 심사 결과를 [dueDate]까지 요청드렸는데 심사위원님께서 아직 심사 결과를 제출하지 않으셨습니다. 빠른 시일 내에 논문 심사 결과를 아래 온라인 시스템에서 제출해 주시길 부탁드립니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 29 && ($journalType == 'A' || $journalType == 'B'))
+다음의 온라인 시스템에 접속하셔서 논문의 게재 수락 여부를 결정하여 편집장에게 심사 결과를 추천해 주시기 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 29 && ($journalType == 'C' || $journalType == 'D'))
+다음의 온라인 시스템에 접속하셔서 논문의 게재 수락 여부를 결정하시기 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 30)
+다음의 온라인 시스템에 접속하셔서 심사위원들의 논문 심사 결과를 포함한 논문 심사 추천 결과를 확인하시고 논문의 게재 수락 여부를 결정하시기 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 31)
+본 메일의 후반부에는 제출하신 논문의 심사 결과가 있으며 아래 온라인 시스템을 로그인하여 찾아보실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+이후에 수행하실 사항은 출판용 논문 (Camera-ready Paper)을 준비하여 위 온라인 시스템으로 제출하시면 됩니다.
+
+출판용 논문을 준비하실 때에는 반드시 논문의 심사 결과를 반영하여 준비하시기 바랍니다. 출판용 논문을 준비하실 때에 활용하실 템플릿은 아래에서 다운받으실 수 있습니다.
+
+출판용 논문 템플릿: [cameraReadyTemplateUrl]
+
+출판용 논문의 제출 기한 날짜는 [cameraReadySubmitDate]까지입니다. 반드시 기한 내에 제출해주시길 바랍니다.
+
+한편, 출판용 논문 제출시에는 아래의 저작권 양도 동의서 (Copyright Transfer Agreement) 양식을 다운받아 양식 내에 정보를 기입하셔서 함께 제출하시기 바랍니다.
+
+저작권 양도 동의서 양식: [copyrightUrl]
+
+이후 출판에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다. 
+
+${journal.title}에 논문을 제출해 주셔서 감사합니다.
+#elseif ($mailId == 32)
+논문 심사 결과: [reviewDecision]
+
+본 메일의 후반부에는 제출하신 논문의 심사 결과가 있으며 아래 온라인 시스템을 로그인하여 찾아보실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+저자분(들)께서는 수정 논문을 다시 제출하실 수 있습니다. 수정 논문을 준비하실 때에는 논문의 심사 결과를 참고하여 준비하셔야 하며 수정 논문이 완성되면 위 온라인 시스템으로 제출하시면 됩니다.
+
+또한, 논문 심사위원님들의 논문 심사평에 대한 응답서 (Reply Letter)를 별도로 준비하셔서 함께 제출하시기 바랍니다. 응답서는 PDF나 Word중 하나로 준비하시면 됩니다 (PDF 선호).
+
+수정 논문과 응답서에 대한 제출 기한 날짜는 [updatedManuscriptSubmitDate]입니다. 이후 수정 논문 제출에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+
+${journal.title}에 논문을 제출해 주셔서 감사합니다.
+#elseif ($mailId == 33)
+논문 심사 결과: [reviewDecision]
+
+죄송하지만, 심사위원분들의 심사 결과에 따라 ${journal.title}에 게재가 어렵다고 판단됩니다. 
+
+본 메일의 후반부에는 제출하신 논문의 심사 결과가 있으며 아래 온라인 시스템을 로그인하여 찾아보실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+심사위원분들의 심사 결과가 향후 연구에 도움이 되길 바라며, 연구 결과가 더 향상되었을 때 새로운 논문으로 제출하여 주시면 감사하겠습니다. 
+
+${journal.title}에 논문을 제출해 주셔서 감사합니다.
+#elseif ($mailId == 34)
+논문 심사 결과는 아래 온라인 시스템에 로그인하여 확인하실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+수정 논문이 완성되면 위 온라인 시스템에서 제출하시면 되며 논문 심사위원님들의 논문 심사평에 대한 응답서 (Reply Letter)를 별도로 준비하셔서 함께 제출하시기 바랍니다. 응답서는 PDF나 Word중 하나로 준비하시면 됩니다 (PDF 선호).
+
+수정 논문과 응답서에 대한 제출 기한 날짜는 [updatedManuscriptSubmitDate]입니다.
+
+수정 논문 제출에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 35)
+수정 논문과 응답서에 대한 제출 기한 날짜는 [updatedManuscriptSubmitDate]인데 이미 수정 논문 제출 기한이 지나서 안내 메일을 드립니다. 빠른 시일 내에 수정 논문을 제출하지 않으시면 수정 논문 제출 포기로 간주할 수 있습니다.
+
+논문 심사 결과는 아래 온라인 시스템에 로그인하여 확인하실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+수정 논문이 완성되면 위 온라인 시스템에서 제출하시면 되며 논문 심사위원님들의 논문 심사평에 대한 응답서 (Reply Letter)를 별도로 준비하셔서 함께 제출하시기 바랍니다. 응답서는 PDF나 Word중 하나로 준비하시면 됩니다 (PDF 선호).
+
+수정 논문 제출에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 36)
+[updatedManuscriptSubmitDate]가 수정 논문과 응답서에 대한 기존 제출 기한 날짜인데, 저자분들이 [dueDate]까지 수정 논문 제출 기한 연장을 요청하였습니다. 편집위원분들과 상의하셔서 요청 수락 여부를 결정하신 후에 아래 온라인 시스템에서 처리하시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+감사합니다.
+#elseif ($mailId == 37)
+승인된 수정 논문 제출 기한 날짜는 [dueDate]입니다. 기한 내에 수정 논문과 논문 심사평에 대한 응답서 (Reply Letter)를 다음 온라인 시스템에서 제출하시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 38)
+죄송하지만 논문 출판 일정상 저자분의 수정 논문 제출 기한 연장 요청을 받아드릴 수가 없습니다. 기존 수정 논문 제출 기한 날짜는 [updatedManuscriptSubmitDate]이며, 빠른 시일 내에 수정 논문과 논문 심사평에 대한 응답서 (Reply Letter)를 다음 온라인 시스템에서 제출하시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 39)
+죄송하지만, 심사위원분들의 심사 결과를 모두 취합하여 논문 게재 여부를 판단하기 전에 ${journal.title} 저널 편집위원들은 본 논문의 게재가 어렵다고 판단하였습니다. 
+
+본 메일의 후반부에는 제출하신 논문의 심사 결과가 있으며 아래 온라인 시스템을 로그인하셔도 찾아보실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+심사위원분들의 심사 결과가 향후 연구에 도움이 되길 바라며, 연구 결과가 더 향상되었을 때 새로운 논문으로 제출하여 주시면 감사하겠습니다.
+#elseif ($mailId == 40)
+출판용 논문을 준비하실 때에는 반드시 논문의 심사 결과를 반영하여 준비하셔야 하며, 제출하신 논문의 심사 결과는 아래 온라인 시스템에서 찾아보실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+출판용 논문의 제출 기한 날짜는 [cameraReadySubmitDate]이며 기한내에 완성하여 위 온라인 시스템으로 제출하시면 됩니다.
+
+출판용 논문을 준비하실 때에 활용하실 템플릿은 아래에서 다운받으실 수 있습니다.
+
+출판용 논문 템플릿: [cameraReadyTemplateUrl]
+
+한편, 출판용 논문 제출시에는 아래의 저작권 양도 동의서 (Copyright Transfer Agreement) 양식을 다운받아 양식 내에 정보를 기입하셔서 함께 제출하시기 바랍니다.
+
+저작권 양도 동의서 양식: [copyrightUrl]
+
+이후 출판에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+#elseif ($mailId == 41)
+[cameraReadySubmitDate]가 출판용 논문의 제출 기한 날짜인데 이미 출판용 논문 제출 기한이 지나서 안내 메일을 드립니다. 빠른 시일 내에 아래 온라인 시스템을 통해 제출하여 주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+출판용 논문을 준비하실 때에는 반드시 논문의 심사 결과를 반영하여 준비하셔야 하며, 제출하신 논문의 심사 결과는 위 온라인 시스템에서 찾아보실 수 있습니다.
+
+출판용 논문을 준비하실 때에 활용하실 템플릿은 아래에서 다운받으실 수 있습니다.
+
+출판용 논문 템플릿: [cameraReadyTemplateUrl]
+
+한편, 출판용 논문 제출시에는 아래의 저작권 양도 동의서 (Copyright Transfer Agreement) 양식을 다운받아 양식 내에 정보를 기입하셔서 함께 제출하시기 바랍니다.
+
+저작권 양도 동의서 양식: [copyrightUrl]
+
+이후 출판에 관한 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+#elseif ($mailId == 42)
+제출하신 위 출판용 논문을 검토한 이후에 (Gallery Proofs) 논문을 만드는 데 문제가 없다고 판단되면 제출 승인 메일을 보내드리겠습니다. 이후 출판까지의 과정은 다음 온라인 시스템을 통해서도 확인하실 수 있습니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+제출하신 출판용 논문에 대한 추가적인 질문이 있다면 저널 관리자에게 연락하시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 43)
+다음의 온라인 시스템에 접속하여 제출된 출판용 논문이 조판 인쇄용 (Gallery Proofs) 논문을 만드는 데 문제가 없는지 검토하신 후 승인을 해주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 44)
+하지만, 제출하신 출판용 논문에 아래와 같은 문제가 있어서 조판 인쇄용 (Gallery Proofs) 논문을 만드는 과정을 진행하기 힘듭니다.
+
+[제출된 출판용 논문에 대한 회송 이유]
+[comments]
+
+위에 기술된 문제들을 고려하여 출판용 논문을 수정하신 후 다음 온라인 시스템을 통해 다시 제출하여 주시길 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+제출하신 출판용 논문을 검토한 이후에 수일 내에 제출 승인 메일을 보내드리겠습니다.
+#elseif ($mailId == 45)
+이후 조판 인쇄용 (Gallery Proofs) 논문이 완성되면 다시 통보해드리겠습니다.
+
+감사합니다.
+#elseif ($mailId == 46)
+다음의 온라인 시스템에 접속하여 제출하신 논문의 조판 인쇄용 (Gallery Proofs) 논문을 검토하시기 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+
+올바른 논문 출판을 위하여 출판 부서에서 요청하는 사항이 있다면 관련 사항에 대한 추가 및 수정 사항을 알려주시기 바랍니다. 또한, 조판 인쇄용 논문에 문제가 있을 시에는 알려주시고 그대로 출판을 해도 된다면 온라인 시스템을 통해 승인을 해주시기 바랍니다.
+
+감사합니다.
+#elseif ($mailId == 47)
+[저자분들이 전달한 조판 인쇄용 논문에 대한 수정 요청 내용]
+[comments]
+
+위 수정 요청 내용을 반영하여 조판 인쇄용 논문을 다시 구성하셔서 아래 온라인 시스템에 업로드해주시기 바랍니다.
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 48)
+현재 구성되어 있는 조판 인쇄용 논문과 함께 출판 작업을 진행하시고 이후 출판이 완료되면 아래 온라인 시스템에서 해당 논문의 상태를 "출판 (Published)"으로 변경해 주시기 바랍니다. 
+
+$systemUtil.trim("#manuscriptlinkJournalUrl")
+#elseif ($mailId == 49 || $mailId == 50)
+
+본 온라인 시스템에서 사용하실 계정 ID는 다음과 같습니다.
+
+로그인 ID (이메일): ${accountCreator.getUsername()}
+
+#manuscriptLinkIntro
+감사합니다.
+#elseif ($mailId == 51 || $mailId == 52 || $mailId == 53)
+
+본 온라인 시스템에서 $systemUtil.trim("#accountCreateeName") 회원님께서 사용하실 계정 정보는 다음과 같습니다.
+
+로그인 ID (이메일): $accountCreatee.getUsername()
+비밀번호: ${randomPassword}
+
+위 시스템에 로그인 하신 후 '개인 프로파일 > 개인 정보 > 패스워드 변경'에서 비밀번호를 변경하실 수 있습니다.
+ 
+#manuscriptLinkIntro
+감사합니다.
+#elseif ($mailId == 53)
+
+위 URL은 하루동안만 유효합니다.
+
+감사합니다.
+#end
+##MANUSCRIPT_OR_REVIEWRESULTS_INFO
+#if ($mailId == 16 || $mailId == 22)
+
+[논문 정보]
+논문 제목: ${manuscript.title}
+논문 초록: ${manuscript.paperAbstract}
+#elseif ($mailId == 31 || $mailId == 32 || $mailId == 33 || $mailId == 39)
+
+[논문 심사 결과]
+------------------------
+[reviewResultByEditorTitle]
+[comments]
+
+[reviewResultByAssociateEditorTitle]
+[reviewResultByAssociateEditor]
+
+[reviewResultByReviewersTitle] 
+[reviewResultByReviewers]
+------------------------
+#end
+
+##CLOSING
+#if ($closingRole == "ML")
+#closingByManuscriptLink
+#elseif ($closingRole == "MA")
+#closingByManager
+#elseif ($closingRole == "CE")
+#closingByChiefEditor
+#elseif ($closingRole == "AE")
+#closingByAssociateEditor
+#elseif ($closingRole == "GE")
+#closingByGuestEditor
+#end
+##########################################################
+## MACRO
+#macro(greetingReviewer)
+#if (${reviewerLocalFullname})
+${reviewerLocalFullname} 논문 심사위원님,
+#else 
+${reviewerSalutation} ${reviewerFirtname} ${reviewerLastname} 논문 심사위원님,
+#end
+#end
+#macro(greetingNewUser)
+#if (${newUserLocalFullname})
+${newUserLocalFullname} 회원님,
+#else
+${newUserSalutation} ${newUserFirtname} ${newUserLastname} 회원님,
+#end
+#end
+#macro(manuscriptSummaryWithSubmissionDateWithoutSubmitId)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: $systemUtil.trim("#submitDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitId)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: $systemUtil.trim("#submitDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdWithoutRequest)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: [submitDate]
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDate)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: $systemUtil.trim("#submitDate")
+심사 결과 통보 날짜: $systemUtil.trim("#notificationDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateWithoutRequest)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: [submitDate]
+심사 결과 통보 날짜: [notificationDate]
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDate)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: $systemUtil.trim("#submitDate")
+심사 결과 통보 날짜: $systemUtil.trim("#acceptDate")
+출판용 논문 제출 날짜: $systemUtil.trim("#cameraReadyUploadDate")
+#end
+#macro(manuscriptSummaryWithSubmissionDateAndSubmitIdAndNotifyDateAndCameraReadyDateWithoutRequest)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+저자: $systemUtil.trim("#authorNames")
+교신 저자: $systemUtil.trim("#correspondingAuthorName")
+교신 저자의 소속 기관: $systemUtil.trim("#correspondingAuthorAffiliation")
+제출 날짜: [submitDate]
+심사 결과 통보 날짜: [acceptDate]
+출판용 논문 제출 날짜: [cameraReadyUploadDate]
+#end
+#macro(manuscriptSummaryToReviewer)
+#if ($manuscriptTrackId == 1)
+스페셜 이슈 (Special Issue): ${specialIssueTitle}
+#end
+논문 ID: ${manuscript.submitId}
+논문 제목: ${manuscript.title}
+#end
+#macro(closingByManuscriptLink)
+ManuscriptLink 관리자
+
+#noReply 
+#end
+#macro(closingByManager)
+$systemUtil.trim("#managerName") $messageSource.getMessage("signin.localJobTitleDesignation.$!manuscript.getManager().getContact().getLocalJobTitle()", null, $locale)
+${journal.title} 저널 관리자
+이메일: $manuscript.getManager().getUsername()
+저널 홈페이지: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByChiefEditor)
+$systemUtil.trim("#chiefEditorName") $messageSource.getMessage("signin.localJobTitleDesignation.$!manuscript.getChiefEditor().getContact().getLocalJobTitle()", null, $locale)
+${journal.title} 편집장
+이메일: $manuscript.getChiefEditor().getUsername()
+저널 홈페이지: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByAssociateEditor)
+$systemUtil.trim("#associateEditorName") $messageSource.getMessage("signin.localJobTitleDesignation.$!manuscript.getAssociateEditor().getContact().getLocalJobTitle()", null, $locale)
+${journal.title} 부편집장
+이메일: $manuscript.getAssociateEditor().getUsername()
+저널 홈페이지: $journal.getHomepage()
+
+#noReply
+#end
+#macro(closingByGuestEditor)
+$systemUtil.trim("#guestEditorName") $messageSource.getMessage("signin.localJobTitleDesignation.$!manuscript.getGuestEditor().getContact().getLocalJobTitle()", null, $locale)
+${journal.title} 초청 편집장
+이메일: $manuscript.getGuestEditor().getUsername()
+저널 홈페이지: $journal.getHomepage()
+
+#noReply
+#end
+#macro(manuscriptlinkJournalUrl)
+#if(${toEmail})
+* 온라인 시스템 URL: ${journalUrl}?id=${toEmail}
+#else
+* 온라인 시스템 URL: ${journalUrl}
+#end
+#end
+#macro(manuscriptLinkIntro)
+MANUSCRIPT LINK 온라인 시스템에서...
+
+* 회원님이 논문 저자라면 새로운 논문을 제출하고 심사 과정을 지켜볼 수 있으며 과거에 제출된 논문들에 대한 이력을 살펴볼 수 있습니다.
+* 회원님이 저널 관리를 담당하신다면 새로운 저널 제출 및 동료심사 서비스를 개설하고 해당 서비스를 출판사의 논문 심사 과정에 따라 맞춤 설정할 수 있습니다. 
+* 회원님이 저널 편집장을 담당하신다면 논문 심사 과정을 관리하고 제출 논문의 게재 수락 및 거절을 최종 결정하여 저널의 가치를 향상시킬 수 있습니다. 
+* 회원님이 저널 논문 심사위원을 담당하신다면 제출된 논문을 평가하여 심사 결과를 제출하실 수 있습니다.
+#end
+#macro(authorNames)
+$coAuthorService.getCoAuthorNames($manuscript.getId())
+#end
+#macro(reviewCompleteCount)
+$journalConfigurationService.getByJournalId($journal.getId()).getReviewCompleteCount()
+#end
+#macro(correspondingAuthorName)
+$contactService.getFullName($manuscript.getCorresAuthor().getUser().getContact(), $journal.getLanguageCode())
+#end
+#macro(correspondingAuthorAffiliation)
+$manuscript.getCorresAuthor().getUser().getContact().getInstitution()
+#end
+#macro(submitDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("I").getDate(), $manuscript.getLastEventDateTime("I").getTime(), $request, $locale)
+#end
+#macro(notificationDate)
+#if ($manuscript.getStatus().equals("D"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("D").getDate(), $manuscript.getLastEventDateTime("D").getTime(), $request, $locale)
+#elseif($manuscript.getStatus().equals("A"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("A").getDate(), $manuscript.getLastEventDateTime("A").getTime(), $request, $locale)
+#elseif($manuscript.getStatus().equals("J"))
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("J").getDate(), $manuscript.getLastEventDateTime("J").getTime(), $request, $locale)
+#end
+#end
+#macro(acceptDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("A").getDate(), $manuscript.getLastEventDateTime("A").getTime(), $request, $locale)
+#end
+#macro(cameraReadyUploadDate)
+$systemUtil.getClientLocalDateAsString($manuscript.getLastEventDateTime("M").getDate(), $manuscript.getLastEventDateTime("M").getTime(), $request, $locale)
+#end
+#macro(authorName)
+#if ($userService.getByUsername(${toEmail}).getContact().getLocalFullName() && !$userService.getByUsername(${toEmail}).getContact().getLocalFullName().equals(""))
+$userService.getByUsername(${toEmail}).getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$userService.getByUsername(${toEmail}).getContact().getSalutation()", null, $locale) $userService.getByUsername(${toEmail}).getContact().getFirstName() $userService.getByUsername(${toEmail}).getContact().getLastName()
+#end
+#end
+#macro(managerName)
+#if ($manuscript.getManager().getContact().getLocalFullName() && !$manuscript.getManager().getContact().getLocalFullName().equals(""))
+$manuscript.getManager().getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getManager().getContact().getSalutation()", null, $locale) $manuscript.getManager().getContact().getFirstName() $manuscript.getManager().getContact().getLastName()
+#end
+#end
+#macro(chiefEditorName)
+#if ($manuscript.getChiefEditor().getContact().getLocalFullName() && !$manuscript.getChiefEditor().getContact().getLocalFullName().equals(""))
+$manuscript.getChiefEditor().getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getChiefEditor().getContact().getSalutation()", null, $locale) $manuscript.getChiefEditor().getContact().getFirstName() $manuscript.getChiefEditor().getContact().getLastName()
+#end
+#end
+#macro(associateEditorName)
+#if ($mailId == 10)
+[AssociateEditor]
+#elseif ($manuscript.getAssociateEditor().getContact().getLocalFullName() && !$manuscript.getAssociateEditor().getContact().getLocalFullName().equals(""))
+$manuscript.getAssociateEditor().getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getAssociateEditor().getContact().getSalutation()", null, $locale) $manuscript.getAssociateEditor().getContact().getFirstName() $manuscript.getAssociateEditor().getContact().getLastName()
+#end
+#end
+#macro(guestEditorName)
+#if ($manuscript.getGuestEditor().getContact().getLocalFullName() && !$manuscript.getGuestEditor().getContact().getLocalFullName().equals(""))
+$manuscript.getGuestEditor().getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$manuscript.getGuestEditor().getContact().getSalutation()", null, $locale) $manuscript.getGuestEditor().getContact().getFirstName() $manuscript.getGuestEditor().getContact().getLastName()
+#end
+#end
+#macro(reviewerName)
+#set($reviewer = $userService.getByUsername($toEmail))
+#if ($reviewer.getContact().getLocalFullName() && !$reviewer.getContact().getLocalFullName().equals(""))
+$reviewer.getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$reviewer.getContact().getSalutation()", null, $locale) $reviewer.getContact().getFirstName() $reviewer.getContact().getLastName()
+#end
+#end
+#macro(associateEditorEmail)
+$manuscript.getAssociateEditor().getUsername()
+#end
+#macro(accountCreatorName)
+#if ($accountCreator.getContact().getLocalFullName() && !$accountCreator.getContact().getLocalFullName().equals(""))
+$accountCreator.getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$accountCreator.getContact().getSalutation()", null, $locale) $accountCreator.getContact().getFirstName() $accountCreator.getContact().getLastName()
+#end
+#end
+#macro(accountCreateeName)
+#if ($accountCreatee.getContact().getLocalFullName() && !$accountCreatee.getContact().getLocalFullName().equals(""))
+$accountCreatee.getContact().getLocalFullName()
+#else
+$messageSource.getMessage("signin.salutationDesignation.$accountCreatee.getContact().getSalutation()", null, $locale) $accountCreatee.getContact().getFirstName() $accountCreatee.getContact().getLastName()
+#end
+#end
+#macro(noReply)
+==============[주의]==============
+본 메일은 발신전용 메일로 회신시에 
+수신자에게 전달되지 않습니다.
+#end
