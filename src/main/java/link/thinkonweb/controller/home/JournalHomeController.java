@@ -11,11 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import link.thinkonweb.configuration.SystemConstants;
+import link.thinkonweb.dao.manuscript.CoAuthorDao;
 import link.thinkonweb.dao.manuscript.ManuscriptDao;
+import link.thinkonweb.dao.manuscript.ReviewDao;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.user.Authority;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.journal.JournalService;
+import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.AuthorityService;
 import link.thinkonweb.service.user.UserService;
 
@@ -49,6 +52,13 @@ public class JournalHomeController {
 	
 	@Autowired
 	private ManuscriptDao manuscriptDao;
+	@Autowired
+	private CoAuthorDao coAuthorDao;
+	@Autowired
+	private ReviewDao reviewDao;
+	@Autowired
+	private ReviewerService reviewerService;
+	
 	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
@@ -182,6 +192,17 @@ public class JournalHomeController {
 					request.getSession().setAttribute("journal", journal);
 					request.getSession().setAttribute("roles", roles);
 					request.getSession().setAttribute("username", user.getUsername());
+					
+					//TODO
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					mav.setViewName("journal.home.journalHome");
 					return mav;
 				}
