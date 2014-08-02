@@ -61,18 +61,8 @@ public class HomeController {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-
-		if (username.equals("anonymousUser")) {
-			mav.setViewName("home.signin");
-			return mav;
-		} else {
-			RedirectView rv = new RedirectView("activity/myActivity");
-			rv.setExposeModelAttributes(false);
-			mav.setView(rv);
-			return mav;
-		}
+		mav.setViewName("home.signin");
+		return mav;
 	}
 
 	@Transactional

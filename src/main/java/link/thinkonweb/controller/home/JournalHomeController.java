@@ -59,8 +59,24 @@ public class JournalHomeController {
 	@Autowired
 	private ReviewerService reviewerService;
 	
-	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
+	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
+							  Locale locale, 
+							  HttpSession session,
+							  HttpServletRequest request,
+							  HttpServletResponse response) {
+		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+		
+		ModelAndView mav = new ModelAndView();
+		
+		Journal journal = this.journalService.getByJournalNameId(jnid);
+		mav.addObject("jnid", jnid);
+		
+		mav.setViewName("journal.home.journalHome");
+		return mav;
+	}
+	
+/*	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
 							  Locale locale, 
 							  HttpSession session,
@@ -109,14 +125,7 @@ public class JournalHomeController {
 					return mav;
 				} 
 				
-				/*else if(!journal.isPaid()) {
-					if(journal.getCreator() != null)
-						mav.addObject("creator", journal.getCreator());
-					mav.setViewName("exception.unpaid");
-					return mav;
-				}
-				
-*/				if (authorityService.getAuthority(user.getId(), journal.getId(), SystemConstants.roleMember) == null) {
+				if (authorityService.getAuthority(user.getId(), journal.getId(), SystemConstants.roleMember) == null) {
 					mav.addObject("journal", journal);
 					mav.setViewName("journal.home.journalSubscribe");
 					return mav;
@@ -154,10 +163,7 @@ public class JournalHomeController {
 							localeResolver.setLocale(request, response, new Locale("en", "US"));
 						}
 					}
-					/*{SystemConstants.statusB, SystemConstants.statusI, SystemConstants.statusO, SystemConstants.statusR, 
-					SystemConstants.statusE, SystemConstants.statusD, SystemConstants.statusV, SystemConstants.statusA, SystemConstants.statusM, 
-					SystemConstants.statusG, SystemConstants.statusP, SystemConstants.statusJ, SystemConstants.statusW};
-					*/
+
 					List<String> submittedAndConfirmedStatus = new ArrayList<String>();
 					submittedAndConfirmedStatus.add(SystemConstants.statusO);
 					submittedAndConfirmedStatus.add(SystemConstants.statusR);
@@ -208,7 +214,10 @@ public class JournalHomeController {
 				}
 			} 
 		}
-	}
+	}*/
+	
+	
+	
 	
 	@RequestMapping(value="/{jnid}/serviceDetail", method=RequestMethod.GET)
 	public ModelAndView serviceDetail(@PathVariable(value="jnid") String jnid, 
