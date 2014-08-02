@@ -71,7 +71,40 @@ public class JournalHomeController {
 		
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
+		/*
+		List<Manuscript> manuscripts = manuscriptService.getSubmittedManuscripts(0, journal.getId(), SystemConstants.statusO);
+		for(Manuscript manuscript: manuscripts) {
+		  List<Keyword> keywords = manuscript.getKeywords();
+		  System.out.println("Manuscript ID: " + manuscript.getId());
+		  System.out.println("Keyword: ");
+		  for(Keyword keyword: keywords)
+		    System.out.println(keyword.getKeyword() + " ");
+		  
+		}
 		
+		
+		
+		
+		List<Reviewer> reviewers = reviewerService.List<Reviewer> getReviewers(0, journal.getId());
+		List<String> reviewStatus = new ArrayList<String>();
+		reviewStatus.add(SystemConstants.reviewerI);
+		reviewStatus.add(SystemConstants.reviewerA);
+		for(Reviewer reviewer: reviewers) {
+		  System.out.println("Reviewer User ID: " + reviewer.getUser().getId());
+		  SystemUser reviewerUser = reviewer.getUser();
+		  List<UserExpertise> expertises = reviewerUser.getExpertises(reviewerUser.getId());
+		  System.out.println("Expertise: ");
+		  for(UserExpertise ue: expertises)
+		    System.out.println(ue.getExpertise() + " ");
+		    
+		  int numCurrentReview = reviewerService.numReviewManuscripts(reviewer.getUser().getId(), 0, journal.getId(), -1, reviewStatus);
+		  System.out.prnitln("Current Reviewing Manuscripts: " + numCurrentReview;
+		
+		}
+		
+		
+		
+		*/
 		mav.setViewName("journal.home.journalHome");
 		return mav;
 	}
