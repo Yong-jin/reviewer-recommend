@@ -1,1 +1,15 @@
-/target/
+/target
+*.class
+pom.properties
+Thumbs.db
+.settings
+.classpath
+/bin
+*.java.hsp
+*.sonarj
+*.sw*
+.DS_Store
+.springBeans
+.externalToolBuilders
+.project
+.~lock.jms_mail.xls#
