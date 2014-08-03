@@ -36,10 +36,12 @@ public interface ManuscriptService {
 	
 	
 	public List<Manuscript> 	getSubmittedManuscripts(int userId, int journalId, String status);
+	public List<Manuscript> 	getSubmittedManuscripts(int journalId, String status, int revisionCount);
 	public List<Manuscript> 	getSubmittedManuscripts(int userId, int journalId, List<String> status, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames, int buildLevel);
 	public List<Manuscript> 	getSubmittedManuscriptsFromManagerConfiguration(Journal journal, List<String> status, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames, List<String> indexNames, int buildLevel);
 	public int 					numSubmittedManuscripts(int userId, int journalId, List<String> status);
 	public int 					numSubmittedManuscripts(int journalId, String status);
+	public int 					numSubmittedManuscripts(int journalId, String status, int revisionCount);
 	public List<Manuscript> 	getCoWrittenManuscripts(int userId, int journalId, String status, boolean includeWrittenByMe);
 	public List<Manuscript> 	getCoWrittenManuscripts(int userId, int journalId, List<String> status, boolean includeWrittenByMe, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames, int buildLevel);
 	public int 					numCoWrittenManuscripts(int userId, int journalId, List<String> status, boolean includeWrittenByMe);

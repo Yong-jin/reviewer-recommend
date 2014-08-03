@@ -94,6 +94,26 @@ public class ManuscriptDaoImpl extends NamedParameterJdbcDaoSupport implements M
 			}
 		}
 	}
+	
+	@Override
+	public List<Manuscript> findSubmittedManuscripts(int journalId, String status, int revisionCount) {
+		List<Manuscript> manuscripts = null;
+		String revisionClause;
+		if(revisionCount == -1)
+			revisionClause = "";
+		else if(revisionCount == 0)
+			revisionClause = " AND REVISION_COUNT = 0";
+		else if(revisionCount == Integer.MAX_VALUE)
+			revisionClause = " AND REVISION_COUNT > 0";
+		else
+			revisionClause = " AND REVISION_COUNT = " + revisionCount;
+		
+		String sql = "SELECT * FROM MANUSCRIPTS WHERE JOURNAL_ID = ? AND STATUS = ?" + revisionClause;
+		manuscripts = this.getJdbcTemplate().query(sql, new Object[] {journalId, status}, manuscriptRowMapper);	
+		return manuscripts;
+
+
+	}
 
 	@Override
 	public List<Manuscript> findSubmittedManuscripts(int userId, int journalId, List<String> status, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames) {
@@ -420,6 +440,25 @@ public class ManuscriptDaoImpl extends NamedParameterJdbcDaoSupport implements M
 	public int numSubmittedManuscripts(int journalId, String status) {
 		try {
 			String sql = "SELECT count(*) FROM MANUSCRIPTS WHERE JOURNAL_ID = ? AND STATUS = ?";
+			return this.getJdbcTemplate().queryForObject(sql, new Object[] {journalId, status}, Integer.class);	
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+	
+	@Override
+	public int numSubmittedManuscripts(int journalId, String status, int revisionCount) {
+		try {
+			String revisionClause;
+			if(revisionCount == -1)
+				revisionClause = "";
+			else if(revisionCount == 0)
+				revisionClause = " AND REVISION_COUNT = 0";
+			else if(revisionCount == Integer.MAX_VALUE)
+				revisionClause = " AND REVISION_COUNT > 0";
+			else
+				revisionClause = " AND REVISION_COUNT = " + revisionCount;
+			String sql = "SELECT count(*) FROM MANUSCRIPTS WHERE JOURNAL_ID = ? AND STATUS = ?" + revisionClause;
 			return this.getJdbcTemplate().queryForObject(sql, new Object[] {journalId, status}, Integer.class);	
 		} catch(Exception e) {
 			return 0;

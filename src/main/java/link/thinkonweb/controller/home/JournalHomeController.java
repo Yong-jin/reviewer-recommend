@@ -32,7 +32,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -74,14 +73,27 @@ public class JournalHomeController {
 		
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
+		List<Manuscript> manuscripts = new ArrayList<Manuscript>();
+		List<Manuscript> newManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusO, 0);
+		List<Manuscript> updatedManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusR, Integer.MAX_VALUE);
+		for(Manuscript manuscript: newManuscripts)
+			manuscripts.add(manuscript);
 		
-		List<Manuscript> manuscripts = manuscriptService.getSubmittedManuscripts(0, journal.getId(), SystemConstants.statusO);
+		for(Manuscript manuscript: updatedManuscripts)
+			manuscripts.add(manuscript);
+		
 		for(Manuscript manuscript: manuscripts) {
 		  List<Keyword> keywords = manuscript.getKeywords();
 		  System.out.println("Manuscript ID: " + manuscript.getId());
 		  System.out.print("Keyword: ");
 		  for(Keyword keyword: keywords)
 		    System.out.print(keyword.getKeyword() + ", ");
+		  System.out.println();
+		  
+		  System.out.println("Authors");
+		  List<Integer> coAuthorUserIds = coAuthorDao.findCoAuthorIds(manuscript.getId(), -1, 0, false);
+		  for(Integer id: coAuthorUserIds)
+			  System.out.print(id + ", ");
 		  System.out.println();
 		}
 		

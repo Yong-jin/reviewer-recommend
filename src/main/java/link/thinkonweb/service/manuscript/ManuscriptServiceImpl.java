@@ -200,6 +200,14 @@ public class ManuscriptServiceImpl implements ManuscriptService {
 	}
 	
 	@Override
+	public List<Manuscript> getSubmittedManuscripts(int journalId, String status, int revisionCount) {
+		List<Manuscript> manuscripts = manuscriptDao.findSubmittedManuscripts(journalId, status, revisionCount);
+		return manuscriptBuilder.builds(manuscripts, SystemConstants.VIEW_BUILD);
+	}
+	
+	
+	
+	@Override
 	public List<Manuscript> getSubmittedManuscripts(int userId, int journalId, List<String> status, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames, int buildLevel) {
 		List<Manuscript> manuscripts = manuscriptDao.findSubmittedManuscripts(userId, journalId, status, dRequest, iTotalDisplayRecordsPlaceHolder, sortableColumnNames);
 		return manuscriptBuilder.builds(manuscripts, buildLevel);
@@ -219,6 +227,11 @@ public class ManuscriptServiceImpl implements ManuscriptService {
 	@Override
 	public int numSubmittedManuscripts(int journalId, String status) {
 		return manuscriptDao.numSubmittedManuscripts(journalId, status);
+	}
+	
+	@Override
+	public int numSubmittedManuscripts(int journalId, String status, int revisionCount) {
+		return manuscriptDao.numSubmittedManuscripts(journalId, status, revisionCount);
 	}
 	
 	@Override

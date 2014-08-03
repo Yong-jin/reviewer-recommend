@@ -19,6 +19,8 @@ public interface ManuscriptDao {
 	public List<Manuscript> findSubmittedManuscriptsFromManagerConfiguration(Journal journal, List<String> status, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames, List<String> indexNames);
 	public int 				numSubmittedManuscripts(int userId, int journalId, List<String> status);
 	public int 				numSubmittedManuscripts(int journalId, String status);
+	public List<Manuscript> findSubmittedManuscripts(int journalId, String status, int revisionCount);
+	public int numSubmittedManuscripts(int journalId, String status, int revisionCount);
 	
 	public List<Manuscript> findCoWrittenManuscripts(int userId, int journalId, String status, boolean includeWrittenByMe);
 	public List<Manuscript> findCoWrittenManuscripts(int userId, int journalId, List<String> status, boolean includeWrittenByMe, DataTableClientRequest dRequest, int[] iTotalDisplayRecordsPlaceHolder, List<String> sortableColumnNames);
