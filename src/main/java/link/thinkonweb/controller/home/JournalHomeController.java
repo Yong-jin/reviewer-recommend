@@ -1,8 +1,6 @@
 package link.thinkonweb.controller.home;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,11 +13,16 @@ import link.thinkonweb.dao.manuscript.CoAuthorDao;
 import link.thinkonweb.dao.manuscript.ManuscriptDao;
 import link.thinkonweb.dao.manuscript.ReviewDao;
 import link.thinkonweb.domain.journal.Journal;
-import link.thinkonweb.domain.user.Authority;
+import link.thinkonweb.domain.manuscript.Keyword;
+import link.thinkonweb.domain.manuscript.Manuscript;
+import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
+import link.thinkonweb.domain.user.UserExpertise;
 import link.thinkonweb.service.journal.JournalService;
+import link.thinkonweb.service.manuscript.ManuscriptService;
 import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.AuthorityService;
+import link.thinkonweb.service.user.UserExpertiseService;
 import link.thinkonweb.service.user.UserService;
 
 import org.slf4j.Logger;
@@ -30,10 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.RequestContextUtils;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/journals")
@@ -58,6 +58,10 @@ public class JournalHomeController {
 	private ReviewDao reviewDao;
 	@Autowired
 	private ReviewerService reviewerService;
+	@Autowired
+	private ManuscriptService manuscriptService;
+	@Autowired
+	private UserExpertiseService userExpertiseService;
 	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
@@ -65,201 +69,40 @@ public class JournalHomeController {
 							  HttpSession session,
 							  HttpServletRequest request,
 							  HttpServletResponse response) {
-		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 		
 		ModelAndView mav = new ModelAndView();
 		
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
-		/*
+		
 		List<Manuscript> manuscripts = manuscriptService.getSubmittedManuscripts(0, journal.getId(), SystemConstants.statusO);
 		for(Manuscript manuscript: manuscripts) {
 		  List<Keyword> keywords = manuscript.getKeywords();
 		  System.out.println("Manuscript ID: " + manuscript.getId());
-		  System.out.println("Keyword: ");
+		  System.out.print("Keyword: ");
 		  for(Keyword keyword: keywords)
-		    System.out.println(keyword.getKeyword() + " ");
-		  
+		    System.out.print(keyword.getKeyword() + ", ");
+		  System.out.println();
 		}
 		
-		
-		
-		
-		List<Reviewer> reviewers = reviewerService.List<Reviewer> getReviewers(0, journal.getId());
+		List<Reviewer> reviewers = reviewerService.getReviewers(0, journal.getId());
 		List<String> reviewStatus = new ArrayList<String>();
 		reviewStatus.add(SystemConstants.reviewerI);
 		reviewStatus.add(SystemConstants.reviewerA);
 		for(Reviewer reviewer: reviewers) {
 		  System.out.println("Reviewer User ID: " + reviewer.getUser().getId());
 		  SystemUser reviewerUser = reviewer.getUser();
-		  List<UserExpertise> expertises = reviewerUser.getExpertises(reviewerUser.getId());
-		  System.out.println("Expertise: ");
+		  List<UserExpertise> expertises = userExpertiseService.getExpertises(reviewerUser.getId());
+		  System.out.print("Expertise: ");
 		  for(UserExpertise ue: expertises)
-		    System.out.println(ue.getExpertise() + " ");
-		    
+		    System.out.print(ue.getExpertise() + ", ");
+		  System.out.println();
 		  int numCurrentReview = reviewerService.numReviewManuscripts(reviewer.getUser().getId(), 0, journal.getId(), -1, reviewStatus);
-		  System.out.prnitln("Current Reviewing Manuscripts: " + numCurrentReview;
-		
+		  System.out.println("Current Reviewing Manuscripts: " + numCurrentReview);
 		}
 		
 		
-		
-		*/
 		mav.setViewName("journal.home.journalHome");
-		return mav;
-	}
-	
-/*	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
-	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
-							  Locale locale, 
-							  HttpSession session,
-							  HttpServletRequest request,
-							  HttpServletResponse response,
-							  @RequestParam(value="id", required=false) String username) {
-		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-		
-		ModelAndView mav = new ModelAndView();
-		
-		Journal journal = this.journalService.getByJournalNameId(jnid);
-		mav.addObject("jnid", jnid);
-		if (journal == null) {
-			mav.setViewName("exception.404");
-			return mav;
-		} else {			
-			if (authorityService.getUserDetails() == null) { // 대부분 이곳으로 들어옴
-				if (request.getParameter("lang") == null) {
-					if (journal.getLanguageCode().equals("ko")) {
-						localeResolver.setLocale(request, response, new Locale("ko", "KR"));
-					} else {
-						localeResolver.setLocale(request, response, new Locale("en", "US"));
-					}
-				}
-				mav.addObject("journal", journal);
-				if (username != null)
-					mav.addObject("loginUsername", username);
-				mav.setViewName("journal.home.signin");
-				return mav;
-			} else {
-				SystemUser user = this.userService.getByUsername(authorityService.getUserDetails().getUsername());
-				if(!journal.isEnabled()) {
-					if(authorityService.getAuthority(user.getId(), journal.getId(), SystemConstants.roleManager) != null) {
-						String nextStep = "1";
-						if(journal.getLanguageCode().equals("ko") && user.getContact().getLocalJobTitle() == null)
-							nextStep = "0";
-						
-						RedirectView rv = new RedirectView("journals/"+ journal.getJournalNameId() + "/manager/configuration/journal/setup/step/" + nextStep);
-						rv.setExposeModelAttributes(false);
-						mav.setView(rv);
-					} else {
-						if(journal.getCreator() != null)
-							mav.addObject("creator", journal.getCreator());
-						mav.setViewName("exception.disabled");
-					}
-					return mav;
-				} 
-				
-				if (authorityService.getAuthority(user.getId(), journal.getId(), SystemConstants.roleMember) == null) {
-					mav.addObject("journal", journal);
-					mav.setViewName("journal.home.journalSubscribe");
-					return mav;
-				} else {
-					
-					List<Authority> authorities = this.authorityService.getAuthorities(user.getId(), journal.getId(), null);
-					
-					Collections.sort(authorities, new Comparator<Authority>() {
-						@Override
-						public int compare(Authority a1, Authority a2) {
-							if (a1.getRole().equals(SystemConstants.roleCEditor) && !a2.getRole().equals(SystemConstants.roleCEditor))
-								return 1;
-							else if (a1.getRole().equals(SystemConstants.roleManager) && !a2.getRole().equals(SystemConstants.roleManager))
-								return -1;
-							else if (a1.getRole().equals(SystemConstants.roleAEditor) && !a2.getRole().equals(SystemConstants.roleAEditor))
-								return -1;
-							else if (a1.getRole().equals(SystemConstants.roleGEditor) && !a2.getRole().equals(SystemConstants.roleGEditor))
-								return -1;
-							else if (a1.getRole().equals(SystemConstants.roleBMember) && !a2.getRole().equals(SystemConstants.roleBMember))
-								return -1;
-							else if (a1.getRole().equals(SystemConstants.roleReviewer) && !a2.getRole().equals(SystemConstants.roleReviewer))
-								return -1;
-							else 
-								return 0;					
-						}
-					});
-					List<String> roles = new ArrayList<String>();
-					for(Authority a: authorities) {
-						roles.add(a.getRole());
-					}
-					if (request.getParameter("lang") == null) {
-						if (journal.getLanguageCode().equals("ko")) {
-							localeResolver.setLocale(request, response, new Locale("ko", "KR"));
-						} else {
-							localeResolver.setLocale(request, response, new Locale("en", "US"));
-						}
-					}
-
-					List<String> submittedAndConfirmedStatus = new ArrayList<String>();
-					submittedAndConfirmedStatus.add(SystemConstants.statusO);
-					submittedAndConfirmedStatus.add(SystemConstants.statusR);
-					submittedAndConfirmedStatus.add(SystemConstants.statusE);
-					submittedAndConfirmedStatus.add(SystemConstants.statusD);
-					submittedAndConfirmedStatus.add(SystemConstants.statusV);
-					submittedAndConfirmedStatus.add(SystemConstants.statusA);
-					submittedAndConfirmedStatus.add(SystemConstants.statusM);
-					submittedAndConfirmedStatus.add(SystemConstants.statusG);
-					submittedAndConfirmedStatus.add(SystemConstants.statusP);
-					submittedAndConfirmedStatus.add(SystemConstants.statusJ);
-					submittedAndConfirmedStatus.add(SystemConstants.statusW);
-					int numSubmittedAndConfirmedStatus = manuscriptDao.numSubmittedManuscripts(0, journal.getId(), submittedAndConfirmedStatus);
-					mav.addObject("numSubmittedAndConfirmedStatus", numSubmittedAndConfirmedStatus);
-					
-					List<String> underReviewdStatus = new ArrayList<String>();
-					underReviewdStatus.add(SystemConstants.statusR);
-					underReviewdStatus.add(SystemConstants.statusE);
-
-					int numInReviewStatus = manuscriptDao.numSubmittedManuscripts(0, journal.getId(), underReviewdStatus);
-					mav.addObject("numInReviewStatus", numInReviewStatus);
-					
-					List<String> acceptStatus = new ArrayList<String>();
-					acceptStatus.add(SystemConstants.statusA);
-					acceptStatus.add(SystemConstants.statusM);
-					acceptStatus.add(SystemConstants.statusG);
-					acceptStatus.add(SystemConstants.statusP);
-					int numAcceptStatus = manuscriptDao.numSubmittedManuscripts(0, journal.getId(), acceptStatus);
-					mav.addObject("numAcceptStatus", numAcceptStatus);
-					
-					request.getSession().setAttribute("authorityService", authorityService);
-					request.getSession().setAttribute("journal", journal);
-					request.getSession().setAttribute("roles", roles);
-					request.getSession().setAttribute("username", user.getUsername());
-					
-					//TODO
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					mav.setViewName("journal.home.journalHome");
-					return mav;
-				}
-			} 
-		}
-	}*/
-	
-	
-	
-	
-	@RequestMapping(value="/{jnid}/serviceDetail", method=RequestMethod.GET)
-	public ModelAndView serviceDetail(@PathVariable(value="jnid") String jnid, 
-							  Locale locale, 
-							  HttpServletRequest request,
-							  @RequestParam(value="serviceType", required=true) String serviceType) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("serviceType", serviceType);
-		mav.setViewName("journal.home.serviceDetail");
 		return mav;
 	}
 }

@@ -14,16 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.user.ChangePasswordCodeDao;
 import link.thinkonweb.dao.user.UserDao;
-import link.thinkonweb.domain.email.EmailMessage;
-import link.thinkonweb.domain.user.ChangePasswordCode;
 import link.thinkonweb.domain.user.SystemUser;
-import link.thinkonweb.service.email.EmailService;
 import link.thinkonweb.service.journal.JournalService;
-import link.thinkonweb.service.roles.ManagerService;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,8 +40,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Autowired
 	private JournalService journalService;
 	@Autowired
-	private ManagerService managerService;
-	@Autowired
 	private SystemUtil systemUtil;
 	@Autowired
 	private UserDetailsManager userDetailsManager;
@@ -54,8 +47,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private ShaPasswordEncoder shaPasswordEncoder;
 	@Autowired
 	private ChangePasswordCodeDao changePasswordCodeDao;
-	@Autowired
-	private EmailService emailService;
 	
 	@Override
 	public void create(SystemUser user) {
@@ -217,37 +208,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public void resetPassword(String username, HttpServletRequest request, Locale locale) {
-		SystemUser targetUser = this.getByUsername(username);
-		if (targetUser != null) {
-			String maskCode = RandomStringUtils.randomAlphabetic(30);	
-			
-			ChangePasswordCode code = new ChangePasswordCode();
-			code.setEmail(username);
-			code.setExpired(false);
-			code.setMaskCode(maskCode);
-			
-			Date todayDate = systemUtil.getUtcDate();
-			Calendar expireCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			expireCalendar.add(Calendar.DAY_OF_YEAR, 3);			
-			java.util.Date expiredDate = expireCalendar.getTime();
-			
-			
-			code.setRegisterDate(todayDate);
-			code.setExpirationDate(new Date(expiredDate.getTime()));
-			
-			changePasswordCodeDao.add(code);
-			
-			EmailMessage emailMessage = emailService.getGeneralEmailMessage(54, null, null, username, request, locale);
-			String body = emailMessage.getBody();
-			String changeUrl = SystemConstants.baseUrl + "/changePassword?code=" + code.getMaskCode();
-			body = body.replace("[passwordChangeUrl]", changeUrl);
-			emailMessage.setBody(body);
-			emailService.sendEmailOther(54, username, emailMessage, request, locale);
-		}
-	}
-
-	@Override
 	public List<SystemUser> getManagerAccountList(
 			DataTableClientRequest dRequest,
 			int[] iTotalDisplayRecordsPlaceHolder, Locale locale, int journalId) {
@@ -257,5 +217,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public void update(SystemUser user) {
 		this.userDao.update(user);
+	}
+
+	@Override
+	public void resetPassword(String username, HttpServletRequest request,
+			Locale locale) {
+		// TODO Auto-generated method stub
+		
 	}
 }
