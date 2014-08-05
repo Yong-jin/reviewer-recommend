@@ -1,7 +1,9 @@
 package link.thinkonweb.dao.manuscript;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import link.thinkonweb.domain.manuscript.EventDateTime;
 import link.thinkonweb.domain.manuscript.ReviewEventDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,5 +155,22 @@ public class ReviewEventDateTimeDaoImpl extends NamedParameterJdbcDaoSupport imp
 		this.getJdbcTemplate().update(sql, new Object[] {reviewEventDateTime.getId()});
 		
 	}
-
+	@Override
+	public int numReviewsBeforeSpecificDays(int userId, int days) {
+		String sql = "SELECT * FROM MANUSCRIPTS_EVENT_DATE WHERE user_id=? and status = 'C' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
+		List<ReviewEventDateTime> completed = this.getJdbcTemplate().query(sql, new Object[] {userId, days}, reviewEventDateTimeRowMapper);	
+		sql = "SELECT * FROM MANUSCRIPTS_EVENT_DATE WHERE user_id=? and status = 'A' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
+		List<ReviewEventDateTime> assigned = this.getJdbcTemplate().query(sql, new Object[] {userId, days}, reviewEventDateTimeRowMapper);	
+		
+		List<Integer> numReview = new ArrayList<Integer>(); //null;
+		for(ReviewEventDateTime r: completed) {
+			numReview.add(r.getManuscriptId());
+		}
+		for(ReviewEventDateTime r: assigned) {
+			if( !(numReview.contains(r.getManuscriptId())) )
+				numReview.add(r.getManuscriptId());
+		}
+		
+		return numReview.size();
+	}
 }

@@ -12,5 +12,5 @@ public interface ReviewEventDateTimeDao {
 	public ReviewEventDateTime findReviewEventDateTimeById(int id);
 	public List<ReviewEventDateTime> findReviewEventDateTimesByManuscriptId(int manuscriptId);
 	public List<ReviewEventDateTime> findReviewEventDateTimes(int userId, int manuscriptId, int journalId, int revisionCount);
-
+	public int numReviewsBeforeSpecificDays(int userId, int days);
 }

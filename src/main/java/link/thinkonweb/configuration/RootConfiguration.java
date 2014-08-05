@@ -68,26 +68,12 @@ public class RootConfiguration extends WebMvcConfigurerAdapter{
     @Inject
     private ResourceLoader resourceLoader;
 
-    private static final String APP_CONFIG_FILE_PATH = "/resources/config.properties";
-    
-    private static final String AWS_SES_IAM_FILE_PATH = "/resources/aws_ses_iam.properties";
-    
-	@Value("${jdbc.driverClassName}")
-	private String driverClassName;
-	 
-    @Value("${jdbc.url}")
-    private String url;
- 
-    @Value("${jdbc.username}")
-    private String username;
- 
-    @Value("${jdbc.password}")
-    private String password;
+	private String driverClassName = "com.mysql.jdbc.Driver";;
+
     
    	@Bean
     public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
         PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
-        ppc.setLocations(new Resource[] {new ClassPathResource(APP_CONFIG_FILE_PATH) });
         return ppc;
     }
 	
@@ -104,19 +90,6 @@ public class RootConfiguration extends WebMvcConfigurerAdapter{
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-    	registry.addViewController("/promotion/features/management").setViewName("promotion.features.management");
-    	
-    	registry.addViewController("/promotion/customerSupport/aboutus").setViewName("promotion.customerSupport.aboutus");
-    	registry.addViewController("/promotion/customerSupport/prices").setViewName("promotion.customerSupport.prices");
-    	registry.addViewController("/promotion/customerSupport/faq").setViewName("promotion.customerSupport.faq");
-    	registry.addViewController("/promotion/customerSupport/gallery").setViewName("promotion.customerSupport.gallery");
-    	registry.addViewController("/promotion/customerSupport/contactus").setViewName("promotion.customerSupport.contactus");
-    	
-    	registry.addViewController("/promotion/modal/typeA").setViewName("promotion.modal.typeA");
-    	registry.addViewController("/promotion/modal/typeB").setViewName("promotion.modal.typeB");
-    	registry.addViewController("/promotion/modal/typeC").setViewName("promotion.modal.typeC");
-    	registry.addViewController("/promotion/modal/typeD").setViewName("promotion.modal.typeD");
-    	
     	registry.addViewController("/error/404").setViewName("exception.404");
     }
     

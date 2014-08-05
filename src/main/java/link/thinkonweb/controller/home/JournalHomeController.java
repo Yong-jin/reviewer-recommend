@@ -15,11 +15,13 @@ import link.thinkonweb.dao.manuscript.ReviewDao;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.Keyword;
 import link.thinkonweb.domain.manuscript.Manuscript;
+import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.domain.user.UserExpertise;
 import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.manuscript.ManuscriptService;
+import link.thinkonweb.service.recommend.RecommendService;
 import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.AuthorityService;
 import link.thinkonweb.service.user.UserExpertiseService;
@@ -61,6 +63,8 @@ public class JournalHomeController {
 	private ManuscriptService manuscriptService;
 	@Autowired
 	private UserExpertiseService userExpertiseService;
+	@Autowired
+	private RecommendService recommendService;
 	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
@@ -73,6 +77,10 @@ public class JournalHomeController {
 		
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
+		
+		List<String> reviewStatus = new ArrayList<String>();
+		//reviewStatus.add(SystemConstants.reviewerI);
+		reviewStatus.add(SystemConstants.reviewerA);
 		List<Manuscript> manuscripts = new ArrayList<Manuscript>();
 		List<Manuscript> newManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusO, 0);
 		List<Manuscript> updatedManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusR, Integer.MAX_VALUE);
@@ -95,12 +103,32 @@ public class JournalHomeController {
 		  for(Integer id: coAuthorUserIds)
 			  System.out.print(id + ", ");
 		  System.out.println();
+		  
+		  //int numCurrentReview = reviewerService.numReviewManuscripts(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), reviewStatus);
+		 // System.out.println("Current Review: " + numCurrentReview);
+		  List<Review> reviews = reviewerService.getReviews(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
+		  if(reviews != null)
+			  System.out.println("number of current review of this paper: " + reviews.size());
+		  
+		  for(Review review: reviews) {
+			  int userId = review.getUserId();
+			  SystemUser reviewerUser = userService.getById(userId);
+			  System.out.println(reviewerUser.getUsername());	//email
+			  System.out.println(reviewerUser.getContact().getFirstName());	//firstname
+			  System.out.println(reviewerUser.getContact().getLastName());	//lastname
+		  }
+		  
+		  int userId = 45;
+		  List<Review> reviewsOfUser = reviewerService.getReviews(userId, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
+		  if(reviewsOfUser == null)
+			  System.out.println("this reviewer review XX");
+		  else
+			  System.out.println("this reviewer review O");
+		  
 		}
 		
-		List<Reviewer> reviewers = reviewerService.getReviewers(0, journal.getId());
-		List<String> reviewStatus = new ArrayList<String>();
-		reviewStatus.add(SystemConstants.reviewerI);
-		reviewStatus.add(SystemConstants.reviewerA);
+		List<Reviewer> reviewers = reviewerService.getReviewers(0, journal.getId());	//all reviewer
+		List<Reviewer> filteredReviewers = new ArrayList<Reviewer>();	//filtered reviewers
 		for(Reviewer reviewer: reviewers) {
 		  System.out.println("Reviewer User ID: " + reviewer.getUser().getId());
 		  SystemUser reviewerUser = reviewer.getUser();
@@ -111,8 +139,14 @@ public class JournalHomeController {
 		  System.out.println();
 		  int numCurrentReview = reviewerService.numReviewManuscripts(reviewer.getUser().getId(), 0, journal.getId(), -1, reviewStatus);
 		  System.out.println("Current Reviewing Manuscripts: " + numCurrentReview);
+		  if(numCurrentReview < 3)
+			  filteredReviewers.add(reviewer);
+		  
 		}
 		
+		for(Reviewer reviewer: filteredReviewers) {
+			//
+		}
 		
 		mav.setViewName("journal.home.journalHome");
 		return mav;

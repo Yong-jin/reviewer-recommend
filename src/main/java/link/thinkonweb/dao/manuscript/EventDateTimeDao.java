@@ -12,4 +12,5 @@ public interface EventDateTimeDao {
 	public EventDateTime findEventDateById(int id);
 	public List<EventDateTime> findEventDatesByManuscriptId(int manuscriptId);
 
+
 }
