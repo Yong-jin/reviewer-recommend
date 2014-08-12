@@ -82,12 +82,7 @@
 
 <!--	<bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter"-->
  	
- 	<bean id="authenticationFilter" class="link.thinkonweb.controller.security.CustomUsernamePasswordAuthenticationFilter"
-		    p:sessionAuthenticationStrategy-ref="sas"
-		    p:authenticationManager-ref="authenticationManager"
-		   	p:authenticationFailureHandler-ref="customAuthenticationFailureHandler"
-		   	p:rememberMeServices-ref="rememberMeServices"
-		   	p:authenticationSuccessHandler-ref="customAuthenticationSuccessHandler"/>
+
 
   <!-- We just actually need to set the default target url here -->
  	<bean id="customAuthenticationSuccessHandler" 

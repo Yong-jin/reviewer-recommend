@@ -49,8 +49,6 @@ public class ManuscriptBuilder {
 	@Autowired
 	private ReviewerService reviewerService;
 	@Autowired
-	private FileService fileService;
-	@Autowired
 	private ContactService contactService;
 	@Autowired
 	private CoAuthorService coAuthorService;
@@ -101,11 +99,7 @@ public class ManuscriptBuilder {
 						
 						manuscript.setKeyword(keyword);
 					}
-					
-					List<UploadedFile> files = fileService.getFiles(manuscriptId, 0, -1, null);
-					if(files != null) manuscript.setFiles(files);
-					
-			
+
 					List<CoAuthor> coAuthors = coAuthorService.getCoAuthors(manuscriptId, manuscript.getRevisionCount(), 0, false);
 					if(coAuthors != null) {
 						Collections.sort(coAuthors);
@@ -326,16 +320,6 @@ public class ManuscriptBuilder {
 					e.printStackTrace();
 				}
 				return manuscript;
-			} else if(level == SystemConstants.FILE_HISTORY_BUILD) {
-				try {
-					List<UploadedFile> files = fileService.getFiles(manuscriptId, 0, -1, null);
-					if(files != null) manuscript.setFiles(files);
-				} catch (Exception e) {
-					System.out.println("BUILD ERROR MANUSCRIPT ID: " + manuscript.getId());
-					e.printStackTrace();
-				}
-				return manuscript;
-				
 			} else if(level == SystemConstants.EMAIL_BUILD) {
 				try {
 					List<CoAuthor> coAuthors = coAuthorService.getCoAuthors(manuscriptId, manuscript.getRevisionCount(), 0, false);

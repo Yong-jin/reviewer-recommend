@@ -57,8 +57,6 @@ public class ManuscriptServiceImpl implements ManuscriptService {
 	@Autowired
 	private ContactService contactService;
 	@Autowired
-	private FileService fileService;
-	@Autowired
 	private AuthorityService authorityService;
 	@Autowired
 	private UserExpertiseService userExpertiseService;
@@ -167,15 +165,7 @@ public class ManuscriptServiceImpl implements ManuscriptService {
 			}			
 		}
 	}
-	
-	@Override
-	public void discardManuscript(int manuscriptId) {
-		List<UploadedFile> files = fileService.getFiles(manuscriptId, 0, -1, null);
-		for(UploadedFile uf: files)
-			fileService.delete(uf.getId(), uf.getDesignation());
-		
-		manuscriptDao.delete(manuscriptId);
-	}
+
 	
 	@Override
 	public void withdrawManuscript(int manuscriptId) {

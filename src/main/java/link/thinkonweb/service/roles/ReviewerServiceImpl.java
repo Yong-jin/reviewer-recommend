@@ -10,7 +10,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import link.thinkonweb.configuration.SystemConstants;
-import link.thinkonweb.dao.email.EmailMessageDao;
 import link.thinkonweb.dao.manuscript.FinalDecisionDao;
 import link.thinkonweb.dao.manuscript.KeywordDao;
 import link.thinkonweb.dao.manuscript.ManuscriptDao;
@@ -31,12 +30,10 @@ import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.domain.manuscript.ReviewEventDateTime;
 import link.thinkonweb.domain.manuscript.ReviewRequest;
 import link.thinkonweb.domain.manuscript.ReviewerSuggest;
-import link.thinkonweb.domain.manuscript.UploadedFile;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.journal.JournalConfigurationService;
 import link.thinkonweb.service.journal.JournalService;
-import link.thinkonweb.service.manuscript.FileService;
 import link.thinkonweb.service.manuscript.ManuscriptService;
 import link.thinkonweb.service.user.AuthorityService;
 import link.thinkonweb.service.user.UserExpertiseService;
@@ -63,8 +60,6 @@ public class ReviewerServiceImpl implements ReviewerService {
 	@Autowired
 	private KeywordDao keywordDao;
 	@Autowired
-	private EmailMessageDao emailDao;
-	@Autowired
 	private CommentDao commentDao;
 	@Autowired
 	private FinalDecisionDao finalDecisionDao;
@@ -80,8 +75,6 @@ public class ReviewerServiceImpl implements ReviewerService {
 	private AuthorityService authorityService;
 	@Autowired
 	private UserExpertiseService userExpertiseService;
-	@Autowired
-	private FileService fileService;
 	@Autowired
 	private MessageSource messageSource;
 	@Autowired
@@ -111,8 +104,6 @@ public class ReviewerServiceImpl implements ReviewerService {
 		List<String> designations = new ArrayList<String>();
 		for(int i=0; i<AdditionalReviewFileDesignation.values().length; i++)
 			designations.add(AdditionalReviewFileDesignation.getType(i).name());
-		List<UploadedFile> additionalReviews = fileService.getFiles(m.getId(), r.getUserId(), m.getRevisionCount(), designations);
-		r.setAdditionalReviews(additionalReviews);
 		List<ReviewEventDateTime> redtList = reviewEventDateTimeDao.findReviewEventDateTimes(r.getUserId(), r.getManuscriptId(), r.getJournalId(), m.getRevisionCount());
 		r.setReviewEventDateTimes(redtList);
 		return r;
@@ -150,36 +141,7 @@ public class ReviewerServiceImpl implements ReviewerService {
 				FinalDecision finalDecision = finalDecisionDao.findByManuscriptIdAndRevisionCount(r.getManuscriptId(), r.getRevisionCount());
 				r.setFinalDecision(finalDecision);
 				List<String> designations = new ArrayList<String>();
-				for(int i=0; i<AdditionalReviewFileDesignation.values().length; i++)
-					designations.add(AdditionalReviewFileDesignation.getType(i).name());
-				List<UploadedFile> additionalReviews = fileService.getFiles(m.getId(), r.getUserId(), m.getRevisionCount(), designations);
-				r.setAdditionalReviews(additionalReviews);
 				List<ReviewEventDateTime> redtList = reviewEventDateTimeDao.findReviewEventDateTimes(r.getUserId(), manuscriptId, journalId, revisionunt);
-				r.setReviewEventDateTimes(redtList);
-			}
-		}
-		Collections.sort(reviews);
-		return reviews;
-	}
-	
-	@Override
-	public List<Review> getReviewManuscriptsForMyActivity(int reviewerUserId) {
-		List<Review> reviews = reviewDao.findReviewManuscriptsForMyActivity(reviewerUserId);
-		if(reviews != null) {
-			for (Review r: reviews) {
-				SystemUser user = userService.getById(r.getUserId());
-				r.setUser(user);
-				Manuscript m = manuscriptService.getManuscriptById(r.getManuscriptId(), SystemConstants.EVENT_DATE_TIME_BUILD);
-				r.setManuscript(m);
-				
-				FinalDecision finalDecision = finalDecisionDao.findByManuscriptIdAndRevisionCount(r.getManuscriptId(), r.getRevisionCount());
-				r.setFinalDecision(finalDecision);
-				List<String> designations = new ArrayList<String>();
-				for(int i=0; i<2; i++)
-					designations.add(AdditionalReviewFileDesignation.getType(i).name());
-				List<UploadedFile> additionalReviews = fileService.getFiles(m.getId(), r.getUserId(), m.getRevisionCount(), designations);
-				r.setAdditionalReviews(additionalReviews);
-				List<ReviewEventDateTime> redtList = reviewEventDateTimeDao.findReviewEventDateTimes(r.getUserId(), 0, 0, m.getRevisionCount());
 				r.setReviewEventDateTimes(redtList);
 			}
 		}
@@ -241,34 +203,6 @@ public class ReviewerServiceImpl implements ReviewerService {
 		}
 		Collections.sort(reviews);
 		return reviews;
-	}
-	
-	@Override
-	public void selectReviewer(int reviewerUserId, int manuscriptId, boolean createdMember, String password) {
-		Review review = new Review();
-		Manuscript m = manuscriptDao.findById(manuscriptId);
-		review.setUserId(reviewerUserId);
-		review.setManuscriptId(manuscriptId);
-		review.setFirstStatus(SystemConstants.reviewerS);
-		review.setStatus(SystemConstants.reviewerS);
-		review.setUserId(reviewerUserId);
-		review.setRevisionCount(m.getRevisionCount());
-		review.setJournalId(m.getJournalId());
-		if(createdMember) {
-			review.setCreatedMember(true);
-			review.setTempPw(password);
-		}
-		boolean notDuplicated = checkDuplicateReviewer(reviewerUserId, manuscriptId, m.getJournalId(), m.getRevisionCount());
-		if (notDuplicated) {
-			ReviewEventDateTime selectDate = new ReviewEventDateTime();
-			selectDate.setRevisionCount(m.getRevisionCount());
-			selectDate.setUserId(reviewerUserId);
-			selectDate.setManuscriptId(manuscriptId);
-			selectDate.setStatus(SystemConstants.reviewerS);
-			selectDate.setJournalId(m.getJournalId());
-			reviewEventDateTimeDao.insert(selectDate);
-			reviewDao.insert(review);	
-		}
 	}
 	
 	@Override
@@ -356,70 +290,4 @@ public class ReviewerServiceImpl implements ReviewerService {
 		return reviewDao.numReviewsFromReviewerHistory(reviewerUserId, journalId, firstStatus);
 	}
 
-	@Override
-	public void inviteReviewer(int reviewerUserId, Manuscript manuscript,
-			Journal journal, EmailMessage emailMessage, int editorUserId,
-			String randomQuery, HttpServletRequest request, Locale locale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void assignReviewer(int reviewerUserId, Manuscript manuscript,
-			Journal journal, EmailMessage emailMessage, String dateString,
-			HttpServletRequest request, Locale locale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cancelReviewer(int reviewerUserId, Manuscript manuscript,
-			Journal journal, HttpServletRequest request, Locale locale,
-			int revisionCount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void automaticDismissReviewer(int reviewerUserId,
-			Manuscript manuscript, Journal journal, HttpServletRequest request,
-			Locale locale, int revisionCount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dismissReviewer(int reviewerUserId, Manuscript manuscript,
-			Journal journal, HttpServletRequest request, Locale locale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void confirmReviewSheet(boolean confirm, Review review,
-			Journal journal, HttpServletRequest request, Locale locale)
-			throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reviewerDecision(ReviewerSuggest rs, String decision,
-			String randomQuery, Journal journal, HttpServletRequest request,
-			Locale locale) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void checkReviewerDueDate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void checkInvitedReviewer() {
-		// TODO Auto-generated method stub
-		
-	}
 }

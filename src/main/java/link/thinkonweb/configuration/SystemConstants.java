@@ -4,7 +4,6 @@ import java.io.File;
 
 public interface SystemConstants {
 	public static final boolean TEST_MODE = true;
-	public static final String MASTER_PASSWORD = "link#1234";
 	
 	/*	Journal Types	*/
 	public static final String journalTypeA = "A";

@@ -188,20 +188,6 @@
 	<bean id="userDivisionRowMapper" class="link.thinkonweb.dao.journal.UserDivisionRowMapper" />
 	<bean id="userDivisionDivisionRowMapper" class="link.thinkonweb.dao.journal.UserDivisionDivisionRowMapper" />
 
-	
-	<!-- email -->
-	<bean id="emailDeliveryDao" class="link.thinkonweb.dao.email.EmailDeliveryDaoImpl">
-    	<property name="dataSource" ref="dataSource" />
-    </bean>
-    
-	<bean id="emailMessageDao" class="link.thinkonweb.dao.email.EmailMessageDaoImpl">
-    	<property name="dataSource" ref="dataSource" />
-    </bean>
-    
-    <bean id="emailMessageRowMapper" class="link.thinkonweb.dao.email.EmailMessageRowMapper" />
-    <bean id="emailDeliveryRowMapper" class="link.thinkonweb.dao.email.EmailDeliveryRowMapper" />
-    <bean id="emailDeliveryEmailMessageRowMapper" class="link.thinkonweb.dao.email.EmailDeliveryEmailMessageRowMapper" />
-    
     <!-- roles -->
     <bean id="journalRoleDao" class="link.thinkonweb.dao.roles.JournalRoleDaoImpl">
 			<property name="dataSource" ref="dataSource" />

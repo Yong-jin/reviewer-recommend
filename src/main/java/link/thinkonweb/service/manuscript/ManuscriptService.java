@@ -16,7 +16,6 @@ public interface ManuscriptService {
 	
 	public int 					init(int userId, int journalId);
 	public void 				setStep(Manuscript manuscript, int step);
-	public void 				discardManuscript(int manuscriptId);
 	public void 				withdrawManuscript(int manuscriptId);
 	public void 				cameraReadyConfirm(Manuscript manuscript, Journal journal, HttpServletRequest request, Locale locale);
 	public void 				submitAction(Manuscript manuscript, Journal journal, HttpServletRequest request, Locale locale);
