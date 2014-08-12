@@ -1,6 +1,7 @@
 package link.thinkonweb.controller.home;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,75 +79,9 @@ public class JournalHomeController {
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
 		
-		List<String> reviewStatus = new ArrayList<String>();
-		//reviewStatus.add(SystemConstants.reviewerI);
-		reviewStatus.add(SystemConstants.reviewerA);
-		List<Manuscript> manuscripts = new ArrayList<Manuscript>();
-		List<Manuscript> newManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusO, 0);
-		List<Manuscript> updatedManuscripts = manuscriptService.getSubmittedManuscripts(journal.getId(), SystemConstants.statusR, Integer.MAX_VALUE);
-		for(Manuscript manuscript: newManuscripts)
-			manuscripts.add(manuscript);
+		RecommendService recommendService = new RecommendService();
+		HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment();
 		
-		for(Manuscript manuscript: updatedManuscripts)
-			manuscripts.add(manuscript);
-		
-		for(Manuscript manuscript: manuscripts) {
-		  List<Keyword> keywords = manuscript.getKeywords();
-		  System.out.println("Manuscript ID: " + manuscript.getId());
-		  System.out.print("Keyword: ");
-		  for(Keyword keyword: keywords)
-		    System.out.print(keyword.getKeyword() + ", ");
-		  System.out.println();
-		  
-		  System.out.println("Authors");
-		  List<Integer> coAuthorUserIds = coAuthorDao.findCoAuthorIds(manuscript.getId(), -1, 0, false);
-		  for(Integer id: coAuthorUserIds)
-			  System.out.print(id + ", ");
-		  System.out.println();
-		  
-		  //int numCurrentReview = reviewerService.numReviewManuscripts(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), reviewStatus);
-		 // System.out.println("Current Review: " + numCurrentReview);
-		  List<Review> reviews = reviewerService.getReviews(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
-		  if(reviews != null)
-			  System.out.println("number of current review of this paper: " + reviews.size());
-		  
-		  for(Review review: reviews) {
-			  int userId = review.getUserId();
-			  SystemUser reviewerUser = userService.getById(userId);
-			  System.out.println(reviewerUser.getUsername());	//email
-			  System.out.println(reviewerUser.getContact().getFirstName());	//firstname
-			  System.out.println(reviewerUser.getContact().getLastName());	//lastname
-		  }
-		  
-		  int userId = 45;
-		  List<Review> reviewsOfUser = reviewerService.getReviews(userId, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
-		  if(reviewsOfUser == null)
-			  System.out.println("this reviewer review XX");
-		  else
-			  System.out.println("this reviewer review O");
-		  
-		}
-		
-		List<Reviewer> reviewers = reviewerService.getReviewers(0, journal.getId());	//all reviewer
-		List<Reviewer> filteredReviewers = new ArrayList<Reviewer>();	//filtered reviewers
-		for(Reviewer reviewer: reviewers) {
-		  System.out.println("Reviewer User ID: " + reviewer.getUser().getId());
-		  SystemUser reviewerUser = reviewer.getUser();
-		  List<UserExpertise> expertises = userExpertiseService.getExpertises(reviewerUser.getId());
-		  System.out.print("Expertise: ");
-		  for(UserExpertise ue: expertises)
-		    System.out.print(ue.getExpertise() + ", ");
-		  System.out.println();
-		  int numCurrentReview = reviewerService.numReviewManuscripts(reviewer.getUser().getId(), 0, journal.getId(), -1, reviewStatus);
-		  System.out.println("Current Reviewing Manuscripts: " + numCurrentReview);
-		  if(numCurrentReview < 3)
-			  filteredReviewers.add(reviewer);
-		  
-		}
-		
-		for(Reviewer reviewer: filteredReviewers) {
-			//
-		}
 		
 		mav.setViewName("journal.home.journalHome");
 		return mav;
