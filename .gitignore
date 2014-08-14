@@ -13,3 +13,5 @@ Thumbs.db
 .externalToolBuilders
 .project
 .~lock.jms_mail.xls#
+.idea/
+jms.iml
