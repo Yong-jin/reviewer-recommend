@@ -26,7 +26,6 @@
  	<!-- manuscript -->
  	<bean id="coAuthorService" class="link.thinkonweb.service.manuscript.CoAuthorServiceImpl" />
     <bean id="manuscriptService" class="link.thinkonweb.service.manuscript.ManuscriptServiceImpl" />
-    <bean id="fileService" class="link.thinkonweb.service.manuscript.FileServiceImpl" />
     <bean id="manuscriptBuilder" class="link.thinkonweb.service.manuscript.ManuscriptBuilder" />
     <bean id="reviewPreferenceService" class="link.thinkonweb.service.manuscript.ReviewPreferenceServiceImpl" />
     

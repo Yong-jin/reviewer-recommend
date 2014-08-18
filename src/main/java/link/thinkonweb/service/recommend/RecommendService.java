@@ -25,6 +25,7 @@ import link.thinkonweb.service.user.UserExpertiseService;
 public class RecommendService {
 	private List<Keyword> keywords;
 	private List<UserExpertise> expertises;
+	@Autowired
 	private UserExpertiseService userExpertiseService;
 	private int constraint_review_num_for_paper;
 	private int constraint_review_num_for_reviewer;

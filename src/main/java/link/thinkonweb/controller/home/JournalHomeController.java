@@ -64,8 +64,6 @@ public class JournalHomeController {
 	private ManuscriptService manuscriptService;
 	@Autowired
 	private UserExpertiseService userExpertiseService;
-	@Autowired
-	private RecommendService recommendService;
 	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
