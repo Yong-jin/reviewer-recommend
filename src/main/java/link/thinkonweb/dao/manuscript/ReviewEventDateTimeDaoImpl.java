@@ -157,9 +157,9 @@ public class ReviewEventDateTimeDaoImpl extends NamedParameterJdbcDaoSupport imp
 	}
 	@Override
 	public int numReviewsBeforeSpecificDays(int userId, int days) {
-		String sql = "SELECT * FROM MANUSCRIPTS_EVENT_DATE WHERE user_id=? and status = 'C' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
+		String sql = "SELECT * FROM MANUSCRIPTS_REVIEW_EVENT_DATE WHERE user_id=? and status = 'C' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
 		List<ReviewEventDateTime> completed = this.getJdbcTemplate().query(sql, new Object[] {userId, days}, reviewEventDateTimeRowMapper);	
-		sql = "SELECT * FROM MANUSCRIPTS_EVENT_DATE WHERE user_id=? and status = 'A' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
+		sql = "SELECT * FROM MANUSCRIPTS_REVIEW_EVENT_DATE WHERE user_id=? and status = 'A' and event_date > date_add(UTC_DATE(), INTERVAL ? day)";
 		List<ReviewEventDateTime> assigned = this.getJdbcTemplate().query(sql, new Object[] {userId, days}, reviewEventDateTimeRowMapper);	
 		
 		List<Integer> numReview = new ArrayList<Integer>(); //null;

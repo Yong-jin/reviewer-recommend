@@ -30,7 +30,7 @@
     <bean id="reviewPreferenceService" class="link.thinkonweb.service.manuscript.ReviewPreferenceServiceImpl" />
     
     <!-- roles -->
-	<bean id="reviewerService" class="link.thinkonweb.service.roles.ReviewerServiceImpl" />
+	<bean id="recommendService" class="link.thinkonweb.service.recommend.RecommendService" />
 
     
     <!-- user -->
@@ -41,6 +41,8 @@
     <bean id="systemUtil" class="link.thinkonweb.util.SystemUtil" />
 	<bean id="compressUtil" class="link.thinkonweb.util.CompressUtil" />
     
+    <!-- recommend -->
+    <bean id="reviewerService" class="link.thinkonweb.service.roles.ReviewerServiceImpl" />
 
  	<bean id="submitIdGenerator" class="link.thinkonweb.util.SubmitIdGenerator" />
  	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />

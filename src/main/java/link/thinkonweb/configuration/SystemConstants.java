@@ -4,6 +4,12 @@ import java.io.File;
 
 public interface SystemConstants {
 	public static final boolean TEST_MODE = true;
+	/*	Reviewer Recommend	*/
+	public static int constraint_review_num_for_paper = 3;
+	public static int constraint_review_num_for_reviewer = 3;
+	public static int FR_period_days = 180;
+	public static double u_weight_value = 0.5;
+	public static int recommend_extra_ratio = 2;
 	
 	/*	Journal Types	*/
 	public static final String journalTypeA = "A";
