@@ -71,6 +71,17 @@ public class JournalHomeController {
 		
 		HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment(journal);
 		mav.setViewName("journal.home.journalHome");
+		
+		System.out.println("test 1");
+		
+		for(Manuscript m: recommend_List.keySet())
+		{
+			System.out.println("Manuscript : " + m.getId());
+			for(Reviewer r: recommend_List.get(m))
+			{
+				System.out.println("Reviewer : " + r.getUser().getId());
+			}
+		}
 		return mav;
 	}
 }
