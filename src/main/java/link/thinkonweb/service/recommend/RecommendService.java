@@ -35,6 +35,8 @@ public class RecommendService {
 	@Autowired
 	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 
+	private HashMap<Reviewer, Integer> recommend_constraint = new HashMap<Reviewer, Integer>();
+	
 	public double commonKeywords(Manuscript m, SystemUser r) {  //공통키워드 수 찾기
 		double common = 0;
 
@@ -112,14 +114,22 @@ public class RecommendService {
 		List<Review> reviews = reviewerService.getReviews(0, m.getId(), journal.getId(), m.getRevisionCount(), SystemConstants.reviewerA);
 		if(reviews != null)
 			for(Review re: reviews) {
-				if(re.getUser().getId() == r.getUser().getId())
+				if(re.getUser().getId() == r.getUser().getId())  // 현재 둘 사이에 리뷰 중인가
 					isReview = true;
 			}
+		if(recommend_constraint.get(r) < 1)  //추천 제한 수 걸러내기
+			isReview = false;
+		
 		return isReview;
 	}
 
 	public void process_Recommend(Journal journal)
 	{
+		/*
+		 * if( flag == true)
+		 * flag = false;
+		 */
+		
 		HashMap<Manuscript, List<Reviewer>> recommend_List = recommend_Assignment(journal);
 		ReviewerRecommend reviewerRecommend = new ReviewerRecommend();
 		reviewerRecommend.setJournal_id(journal.getId());
@@ -152,19 +162,32 @@ public class RecommendService {
 		List<Manuscript> manuscripts = getNeedManuscripts(journal);
 		System.out.println("test - 3");
 
+		/*
+		for(Reviewer rr : recommend_constraint.keySet() )
+		{
+			System.out.println(rr.getUser().getId() + " count : " + recommend_constraint.get(rr));
+		}
+		*/
+		
 		for(Manuscript m: manuscripts) {
 			List<Reviewer> final_reviewers = new ArrayList<Reviewer>();
 			List<Reviewer> reviewers_1 = new ArrayList<Reviewer>();
 			Reviewer max_r = new Reviewer();
-			
+			boolean someone_possible = false;
+			//리뷰 가능한 사람이 아무도 없는경우 - 해당 논문 추천 필터링
 			
 			for(int i=0; i<SystemConstants.constraint_review_num_for_paper*SystemConstants.recommend_extra_ratio; i++) { // f함수를 가지고 1차를 추천 목록 추려냄
+				
 				for(Reviewer r_init: reviewers) {   //가능한 리뷰어중 초기값
 					if(isReviewing(m, r_init, journal) == false && reviewers_1.contains(r_init) == false) {
 						max_r = r_init;
+						someone_possible = true;
 						break;
 					}
 				}
+				
+				if(someone_possible == false)
+					break;
 				
 				for(Reviewer r: reviewers) {
 					if(isReviewing(m, r, journal) == false && reviewers_1.contains(r) == false) {  //현재 리뷰상태가 아닌  and 1차목록에 없는
@@ -174,6 +197,11 @@ public class RecommendService {
 				}
 				reviewers_1.add(max_r);
 			}//1차 추천목록 끝
+			
+			if(someone_possible == false)
+				continue;
+			
+			
 			//1차 추천 목록을 가지고 FR로 추천목록 결정하기
 			Reviewer min_r = new Reviewer();
 			
@@ -187,9 +215,13 @@ public class RecommendService {
 				}
 				final_reviewers.add(min_r);
 				reviewers_1.remove(min_r);
+				recommend_constraint.put(min_r, recommend_constraint.get(min_r) - 1);
+				if(reviewers_1.size() == 0)  // 1차목록에서 차례로 뽑아내던중 더이상 목록이 없는경우.
+					break;
 			}
 			//한 논문에 대하여 추천목록 결정완료
 			map.put(m, final_reviewers);
+			
 		}
 
 		return map;
@@ -206,8 +238,10 @@ public class RecommendService {
 			SystemUser reviewerUser = reviewer.getUser();
 			//List<UserExpertise> expertises = userExpertiseService.getExpertises(reviewerUser.getId());
 			int numCurrentReview = reviewerService.numReviewManuscripts(reviewerUser.getId(), 0, journal.getId(), -1, reviewStatus);
-			if(numCurrentReview < SystemConstants.constraint_review_num_for_reviewer)
+			if(numCurrentReview < SystemConstants.constraint_review_num_for_reviewer) {
 				possible_Reviewers.add(reviewer);
+				recommend_constraint.put(reviewer, ( SystemConstants.constraint_review_num_for_reviewer - numCurrentReview )  );
+			}
 		}
 
 		return possible_Reviewers;
