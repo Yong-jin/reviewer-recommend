@@ -10,9 +10,11 @@ import javax.servlet.http.HttpSession;
 
 import link.thinkonweb.dao.manuscript.CoAuthorDao;
 import link.thinkonweb.dao.manuscript.ManuscriptDao;
+import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
 import link.thinkonweb.dao.manuscript.ReviewDao;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.Manuscript;
+import link.thinkonweb.domain.manuscript.ReviewerRecommend;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.manuscript.ManuscriptService;
@@ -56,6 +58,8 @@ public class JournalHomeController {
 	private UserExpertiseService userExpertiseService;
 	@Autowired
 	private RecommendService recommendService;
+	@Autowired
+	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 	
 	@RequestMapping(value="/{jnid}", method=RequestMethod.GET)
 	public ModelAndView journalHome(@PathVariable(value="jnid") String jnid, 
@@ -69,11 +73,29 @@ public class JournalHomeController {
 		Journal journal = this.journalService.getByJournalNameId(jnid);
 		mav.addObject("jnid", jnid);
 		
-		HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment(journal);
+		//HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment(journal);
+		recommendService.process_Recommend(journal); //수행 DB에 저장
+		
 		mav.setViewName("journal.home.journalHome");
 		
-		System.out.println("test 1");
+		List<ReviewerRecommend> reviewerRecommends = manuscriptReviewerRecommendDao.findAll(); //DB에서 불러오기
 		
+		
+		int manuscriptId = reviewerRecommends.get(0).getManuscript_id();
+		System.out.println("Paper Id " + manuscriptId + "`s Recommend List");
+		for(ReviewerRecommend r: reviewerRecommends)
+		{
+			if( manuscriptId == r.getManuscript_id()) {
+				System.out.println(" - " + r.getReviewer_user_id());
+			}
+			else {
+				manuscriptId = r.getManuscript_id();
+				System.out.println("Paper Id " + manuscriptId + "`s Recommend List");
+				System.out.println(" - " + r.getReviewer_user_id());
+			}
+		}
+		
+		/*
 		for(Manuscript m: recommend_List.keySet())
 		{
 			System.out.println("Manuscript : " + m.getId());
@@ -82,6 +104,7 @@ public class JournalHomeController {
 				System.out.println("Reviewer : " + r.getUser().getId());
 			}
 		}
+		*/
 		return mav;
 	}
 }

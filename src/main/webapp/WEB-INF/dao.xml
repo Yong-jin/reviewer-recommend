@@ -135,6 +135,15 @@
     </bean>
     <bean id="commentRowMapper" class="link.thinkonweb.dao.manuscript.form.CommentRowMapper"/>
     
+    
+    
+    <bean id="manuscriptReviewerRecommendDao" class="link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDaoImpl">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <bean id="manuscriptReviewerRecommendRowMapper" class="link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendRowMapper" />
+    
+    
+    
 	<!-- journal -->
     <bean id="journalDao" class="link.thinkonweb.dao.journal.JournalDaoImpl">
     	<property name="dataSource" ref="dataSource"></property>

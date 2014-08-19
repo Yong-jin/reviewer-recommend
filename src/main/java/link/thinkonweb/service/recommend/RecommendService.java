@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import link.thinkonweb.configuration.SystemConstants;
+import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
 import link.thinkonweb.dao.manuscript.ReviewEventDateTimeDao;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.Keyword;
 import link.thinkonweb.domain.manuscript.Manuscript;
 import link.thinkonweb.domain.manuscript.Review;
+import link.thinkonweb.domain.manuscript.ReviewerRecommend;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.domain.user.UserExpertise;
@@ -30,6 +32,8 @@ public class RecommendService {
 	private ReviewEventDateTimeDao reviewEventDateTimeDao;
 	@Autowired
 	private ManuscriptService manuscriptService;
+	@Autowired
+	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 
 	public double commonKeywords(Manuscript m, SystemUser r) {  //공통키워드 수 찾기
 		double common = 0;
@@ -114,12 +118,39 @@ public class RecommendService {
 		return isReview;
 	}
 
+	public void process_Recommend(Journal journal)
+	{
+		HashMap<Manuscript, List<Reviewer>> recommend_List = recommend_Assignment(journal);
+		ReviewerRecommend reviewerRecommend = new ReviewerRecommend();
+		reviewerRecommend.setJournal_id(journal.getId());
+		System.out.println("test - 4");
+		for(Manuscript m: recommend_List.keySet())
+		{
+			reviewerRecommend.setManuscript_id(m.getId());
+			reviewerRecommend.setRevision_count(m.getRevisionCount());
+			for(Reviewer r: recommend_List.get(m))
+			{
+				reviewerRecommend.setReviewer_user_id(r.getUser().getId());
+				manuscriptReviewerRecommendDao.insert(reviewerRecommend);
+			}
+		}
+		
+		System.out.println("end recommend Assignment");
+	}
+	
 	public HashMap<Manuscript, List<Reviewer>> recommend_Assignment(Journal journal)  //Main !!! //일단완료
 	{
+		System.out.println("start recommend Assignment");
+		
+		manuscriptReviewerRecommendDao.deleteAll();
+		
 		HashMap<Manuscript, List<Reviewer>> map = new HashMap<Manuscript, List<Reviewer>>();
 
+		System.out.println("test - 1");
 		List<Reviewer> reviewers = getPossibleReviewers(journal);
+		System.out.println("test - 2");
 		List<Manuscript> manuscripts = getNeedManuscripts(journal);
+		System.out.println("test - 3");
 
 		for(Manuscript m: manuscripts) {
 			List<Reviewer> final_reviewers = new ArrayList<Reviewer>();
@@ -193,18 +224,25 @@ public class RecommendService {
 
 		for(Manuscript manuscript: updatedManuscripts)
 			manuscripts.add(manuscript);
-
+		/*
 		for(Manuscript manuscript: manuscripts)
 		{
 			if(manuscript.getStatus().equals("B")  || manuscript.getStatus().equals("I") || manuscript.getStatus().equals("R"))
 				need_Manuscripts.add(manuscript);
 		}
-
-		for(Manuscript manuscript: need_Manuscripts) {
+*/
+		for(Manuscript manuscript: manuscripts) {
 			List<Review> reviews = reviewerService.getReviews(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
 			if(reviews != null)  //현재 논문 리뷰중인 애들 찾기
-				if(reviews.size() >= SystemConstants.constraint_review_num_for_paper)
-					need_Manuscripts.remove(manuscript);
+			{
+				if(reviews.size() < SystemConstants.constraint_review_num_for_paper)
+					need_Manuscripts.add(manuscript);
+			}
+			else 
+			{
+				need_Manuscripts.add(manuscript);
+			}
+					
 		}
 
 		return need_Manuscripts;
