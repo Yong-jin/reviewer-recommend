@@ -166,7 +166,6 @@ public class RecommendService {
 
 	public List<Reviewer> getPossibleReviewers(Journal journal) {  //일단 완료
 		//현재 리뷰갯수 제한에 걸리지 않아서 리뷰어에 참여할 수 있는 조건이 갖추어진 리뷰어들 만을 리스트로 반환
-		System.out.println("journal: " + journal);
 		List<Reviewer> reviewers = reviewerService.getReviewers(0, journal.getId());	//all reviewer
 		List<Reviewer> possible_Reviewers = new ArrayList<Reviewer>();	//filtered possible reviewers
 		List<String> reviewStatus = new ArrayList<String>();
@@ -174,8 +173,8 @@ public class RecommendService {
 
 		for(Reviewer reviewer: reviewers) {
 			SystemUser reviewerUser = reviewer.getUser();
-			List<UserExpertise> expertises = userExpertiseService.getExpertises(reviewerUser.getId());
-			int numCurrentReview = reviewerService.numReviewManuscripts(reviewer.getUser().getId(), 0, journal.getId(), -1, reviewStatus);
+			//List<UserExpertise> expertises = userExpertiseService.getExpertises(reviewerUser.getId());
+			int numCurrentReview = reviewerService.numReviewManuscripts(reviewerUser.getId(), 0, journal.getId(), -1, reviewStatus);
 			if(numCurrentReview < SystemConstants.constraint_review_num_for_reviewer)
 				possible_Reviewers.add(reviewer);
 		}
