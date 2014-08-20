@@ -74,7 +74,9 @@ public class JournalHomeController {
 		mav.addObject("jnid", jnid);
 		
 		//HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment(journal);
-		recommendService.process_Recommend(journal); //수행 DB에 저장
+
+		//밑줄 주석 해제 - 추천 수행
+		//recommendService.process_Recommend(journal); //수행 DB에 저장
 		
 		mav.setViewName("journal.home.journalHome");
 		

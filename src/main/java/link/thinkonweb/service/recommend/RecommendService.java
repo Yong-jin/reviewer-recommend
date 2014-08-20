@@ -3,6 +3,7 @@ package link.thinkonweb.service.recommend;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
@@ -36,7 +37,7 @@ public class RecommendService {
 	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 
 	private HashMap<Reviewer, Integer> recommend_constraint = new HashMap<Reviewer, Integer>();
-	
+
 	public double commonKeywords(Manuscript m, SystemUser r) {  //공통키워드 수 찾기
 		double common = 0;
 
@@ -109,18 +110,20 @@ public class RecommendService {
 		return result;
 	}
 
-	public boolean isReviewing(Manuscript m, Reviewer r, Journal journal) {  //둘사이에 리뷰 중인가. 일단완료
-		boolean isReview = false;
+	public boolean canReview(Manuscript m, Reviewer r, Journal journal) {  //둘사이에 리뷰 중인가. 일단완료
+		boolean canReview = true;
 		List<Review> reviews = reviewerService.getReviews(0, m.getId(), journal.getId(), m.getRevisionCount(), SystemConstants.reviewerA);
 		if(reviews != null)
 			for(Review re: reviews) {
-				if(re.getUser().getId() == r.getUser().getId())  // 현재 둘 사이에 리뷰 중인가
-					isReview = true;
+				if(re.getUser().getId() == r.getUser().getId()) { // 현재 둘 사이에 리뷰 중인가
+					canReview = false;
+					break;
+				}
 			}
 		if(recommend_constraint.get(r) < 1)  //추천 제한 수 걸러내기
-			isReview = false;
-		
-		return isReview;
+			canReview = false;
+
+		return canReview;
 	}
 
 	public void process_Recommend(Journal journal)
@@ -129,7 +132,7 @@ public class RecommendService {
 		 * if( flag == true)
 		 * flag = false;
 		 */
-		
+
 		HashMap<Manuscript, List<Reviewer>> recommend_List = recommend_Assignment(journal);
 		ReviewerRecommend reviewerRecommend = new ReviewerRecommend();
 		reviewerRecommend.setJournal_id(journal.getId());
@@ -144,86 +147,103 @@ public class RecommendService {
 				manuscriptReviewerRecommendDao.insert(reviewerRecommend);
 			}
 		}
-		
+
 		System.out.println("end recommend Assignment");
 	}
-	
+
 	public HashMap<Manuscript, List<Reviewer>> recommend_Assignment(Journal journal)  //Main !!! //일단완료
 	{
 		System.out.println("start recommend Assignment");
-		
+
 		manuscriptReviewerRecommendDao.deleteAll();
-		
+
 		HashMap<Manuscript, List<Reviewer>> map = new HashMap<Manuscript, List<Reviewer>>();
 
-		System.out.println("test - 1");
+		//System.out.println("test - 1");
 		List<Reviewer> reviewers = getPossibleReviewers(journal);
-		System.out.println("test - 2");
+		//System.out.println("test - 2");
 		List<Manuscript> manuscripts = getNeedManuscripts(journal);
-		System.out.println("test - 3");
+		//System.out.println("test - 3");
 
 		/*
 		for(Reviewer rr : recommend_constraint.keySet() )
 		{
 			System.out.println(rr.getUser().getId() + " count : " + recommend_constraint.get(rr));
 		}
-		*/
-		
+*/
+
 		for(Manuscript m: manuscripts) {
 			List<Reviewer> final_reviewers = new ArrayList<Reviewer>();
 			List<Reviewer> reviewers_1 = new ArrayList<Reviewer>();
 			Reviewer max_r = new Reviewer();
-			boolean someone_possible = false;
+			Reviewer min_r = new Reviewer();
+
 			//리뷰 가능한 사람이 아무도 없는경우 - 해당 논문 추천 필터링
-			
+
+			HashMap<Reviewer, Double> reviewer_Fvalue = new HashMap<Reviewer, Double>();
+			HashMap<Reviewer, Double> reviewer_FRvalue = new HashMap<Reviewer, Double>();
+
+			for(Reviewer r: reviewers) {
+				if(canReview(m, r, journal) == true ) {
+					reviewer_Fvalue.put(r, function_F(m, r.getUser(), journal));
+				}
+			}
+
+			if (reviewer_Fvalue.size() == 0 )
+				continue;
+
 			for(int i=0; i<SystemConstants.constraint_review_num_for_paper*SystemConstants.recommend_extra_ratio; i++) { // f함수를 가지고 1차를 추천 목록 추려냄
-				
-				for(Reviewer r_init: reviewers) {   //가능한 리뷰어중 초기값
-					if(isReviewing(m, r_init, journal) == false && reviewers_1.contains(r_init) == false) {
-						max_r = r_init;
-						someone_possible = true;
+				if( i == reviewer_Fvalue.size())
+					break;
+
+				List<Reviewer> keyList = new ArrayList<Reviewer>( reviewer_Fvalue.keySet() );
+
+				for(Reviewer r: keyList) {
+					if(reviewers_1.contains(r) == false) {
+						max_r = r;
 						break;
 					}
 				}
-				
-				if(someone_possible == false)
-					break;
-				
-				for(Reviewer r: reviewers) {
-					if(isReviewing(m, r, journal) == false && reviewers_1.contains(r) == false) {  //현재 리뷰상태가 아닌  and 1차목록에 없는
-						if( function_F(m, r.getUser(), journal) > function_F(m, max_r.getUser(), journal) )
-								max_r = r;
-					}
+
+				for(Reviewer r: keyList) {
+					if( reviewer_Fvalue.get(max_r) < reviewer_Fvalue.get(r) && reviewers_1.contains(r) == false)
+						max_r = r;
 				}
+
 				reviewers_1.add(max_r);
 			}//1차 추천목록 끝
-			
-			if(someone_possible == false)
-				continue;
-			
-			
+
 			//1차 추천 목록을 가지고 FR로 추천목록 결정하기
-			Reviewer min_r = new Reviewer();
-			
+
+			for(Reviewer r: reviewers_1) {
+				reviewer_FRvalue.put(r, functionFR(r.getUser()));
+			}
+
 			for(int j=0; j<SystemConstants.constraint_review_num_for_paper*SystemConstants.recommend_extra_ratio; j++) {
+				if( j == reviewer_FRvalue.size())
+					break;
+
 				min_r = reviewers_1.get(0);  //1차목록중 초기값
-				
+
 				for(Reviewer r: reviewers_1) {
-					if(functionFR(r.getUser()) < functionFR(min_r.getUser())) {
+					if( reviewer_FRvalue.get(min_r) > reviewer_FRvalue.get(r) ) {
 						min_r = r;
 					}
 				}
+				
 				final_reviewers.add(min_r);
 				reviewers_1.remove(min_r);
 				recommend_constraint.put(min_r, recommend_constraint.get(min_r) - 1);
-				if(reviewers_1.size() == 0)  // 1차목록에서 차례로 뽑아내던중 더이상 목록이 없는경우.
-					break;
 			}
 			//한 논문에 대하여 추천목록 결정완료
 			map.put(m, final_reviewers);
-			
 		}
-
+/*
+		for(Reviewer rr : recommend_constraint.keySet() )
+		{
+			System.out.println(rr.getUser().getId() + " count : " + recommend_constraint.get(rr));
+		}
+*/
 		return map;
 	}
 
@@ -264,7 +284,7 @@ public class RecommendService {
 			if(manuscript.getStatus().equals("B")  || manuscript.getStatus().equals("I") || manuscript.getStatus().equals("R"))
 				need_Manuscripts.add(manuscript);
 		}
-*/
+		 */
 		for(Manuscript manuscript: manuscripts) {
 			List<Review> reviews = reviewerService.getReviews(0, manuscript.getId(), journal.getId(), manuscript.getRevisionCount(), SystemConstants.reviewerA);
 			if(reviews != null)  //현재 논문 리뷰중인 애들 찾기
@@ -276,7 +296,7 @@ public class RecommendService {
 			{
 				need_Manuscripts.add(manuscript);
 			}
-					
+
 		}
 
 		return need_Manuscripts;
