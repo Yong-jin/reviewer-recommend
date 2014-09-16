@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RecommendService {
 	private List<Keyword> keywords;
 	private List<UserExpertise> expertises;
+	private HashMap<Reviewer, Integer> recommend_constraint = new HashMap<Reviewer, Integer>();
+
 	@Autowired
 	private UserExpertiseService userExpertiseService;
 	@Autowired
@@ -36,7 +38,7 @@ public class RecommendService {
 	@Autowired
 	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 
-	private HashMap<Reviewer, Integer> recommend_constraint = new HashMap<Reviewer, Integer>();
+
 
 	public double commonKeywords(Manuscript m, SystemUser r) {  //공통키워드 수 찾기
 		double common = 0;
@@ -47,14 +49,89 @@ public class RecommendService {
 		{
 			for(UserExpertise ue: expertises)
 			{
-				if( (keyword.getKeyword()).equals( ue.getExpertise() ) )
+				if( computeDistance(keyword.getKeyword(), ue.getExpertise())/ ( (double)ue.getExpertise().length() > (double)keyword.getKeyword().length() ? (double)ue.getExpertise().length() : (double)keyword.getKeyword().length() ) < 0.2 ) // keyword 전체 비교
 				{
 					common++;
+				}
+				else
+				{
+					String[] k_words = keyword.getKeyword().toLowerCase().split(" |,|_|-");
+					String[] e_words = ue.getExpertise().toLowerCase().split(" |,|_|-");
+					List<String> k_tList = new ArrayList<String>();
+					List<String> e_tList = new ArrayList<String>();
+					List<Boolean> k_boolList = new ArrayList<Boolean>();
+					List<Boolean> e_boolList = new ArrayList<Boolean>();
+					for(String s : k_words)
+					{
+						k_tList.add(s);
+						k_boolList.add(false);
+					}
+					for(String s : e_words)
+					{
+						e_tList.add(s);
+						e_boolList.add(false);
+					}
+					int list_size = k_tList.size() < e_tList.size() ? k_tList.size() : e_tList.size();
+					int mixNum = list_size - 1;
+					boolean getCommon = false;
+					while(mixNum > (list_size/2))
+					{
+						List<String> k_rList  = mixString(mixNum, k_tList, 0, "", new ArrayList<String>(), 0, k_boolList);
+						List<String> e_rList  = mixString(mixNum, e_tList, 0, "", new ArrayList<String>(), 0, e_boolList);
+						for(String k: k_rList)
+						{
+							for(String e: e_rList)
+							{
+								if( computeDistance(k, e)/ ( (double)e.length() > (double)k.length() ? (double)e.length() : (double)k.length() ) < 0.2 ) //조합으로 나눈거 비교
+								{
+									common++;
+									getCommon = true;
+									break;
+								}
+							}
+							if(getCommon)
+								break;
+						}
+						if(getCommon)
+							break;
+						mixNum -= 1;
+					}
+						
 				}
 			}
 		}
 
 		return common;
+	}
+
+	public int computeDistance(String s1, String s2) { //글자 얼마나 비슷한가 체크
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
+
+		int[] costs = new int[s2.length() + 1];
+
+		for(int i =0; i<=s1.length(); i++) {
+			int lastValue = i;
+			for( int j = 0; j<=s2.length(); j++) {
+				if( i==0)
+					costs[j] = j;
+				else {
+					if(j>0) {
+						int newValue = costs[j-1];
+						if( s1.charAt(i-1) != s2.charAt(j-1))
+							newValue = Math.min(Math.min(newValue, lastValue), costs[j])+1;
+
+						costs[j-1] = lastValue;
+						lastValue = newValue;
+					}
+				}
+			}
+
+			if(i>0)
+				costs[s2.length()] = lastValue;
+		}
+
+		return costs[s2.length()];
 	}
 
 	public double functionU(Manuscript m, SystemUser r) { //공통키워드수 찾기 함수 이용해서 functionU완료
@@ -95,7 +172,10 @@ public class RecommendService {
 		return result;
 	}
 
-	public double function_F(Manuscript m, SystemUser r, Journal journal) {  //functionF =  (a)FunctionU+(1-a)functionV   //일단완료 
+	public double function_F(Manuscript m, SystemUser r, Journal journal) {  //functionF =  (a)FunctionU+(1-a)functionV   //일단완료
+		if(functionU(m, r) == 0) 
+			return 0;
+
 		return SystemConstants.u_weight_value*functionU(m, r) + (1-SystemConstants.u_weight_value)*functionV(m, r, journal);
 	}
 
@@ -110,12 +190,39 @@ public class RecommendService {
 		return result;
 	}
 
+	public double fitness_function(List<ReviewerRecommend> reviewerRecommends) {
+		double total_value_F = 0;
+		for(ReviewerRecommend rr: reviewerRecommends) {
+			total_value_F += rr.getRecommend_value();
+		}
+		return total_value_F / (double)reviewerRecommends.size();
+	}
+
 	public boolean canReview(Manuscript m, Reviewer r, Journal journal) {  //둘사이에 리뷰 중인가. 일단완료
 		boolean canReview = true;
-		List<Review> reviews = reviewerService.getReviews(0, m.getId(), journal.getId(), m.getRevisionCount(), SystemConstants.reviewerA);
+
+		List<Review> reviews = new ArrayList<Review>();
+		for(int i=0; i<= m.getRevisionCount(); i++)  // 이전 RevisionCount 까지 확인하기 위해 다 불러옴
+		{
+			List<Review> temp_reviewsA = new ArrayList<Review>( reviewerService.getReviews(0, m.getId(), journal.getId(), i, SystemConstants.reviewerA) );
+			List<Review> temp_reviewsC = new ArrayList<Review>( reviewerService.getReviews(0, m.getId(), journal.getId(), i, SystemConstants.reviewerC) );
+			if(temp_reviewsA != null)
+			{
+				for(Review tr: temp_reviewsA) {
+					reviews.add(tr);
+				}
+			}
+			if(temp_reviewsC != null)
+			{
+				for(Review tr: temp_reviewsC) {
+					reviews.add(tr);
+				}
+			}
+		}		
+
 		if(reviews != null)
 			for(Review re: reviews) {
-				if(re.getUser().getId() == r.getUser().getId()) { // 현재 둘 사이에 리뷰 중인가
+				if(re.getUser().getId() == r.getUser().getId()) { // 현재 둘 사이에 리뷰 중인가  //혹은 이전에도 리뷰한 기록이 있는가.
 					canReview = false;
 					break;
 				}
@@ -133,31 +240,30 @@ public class RecommendService {
 		 * flag = false;
 		 */
 
-		HashMap<Manuscript, List<Reviewer>> recommend_List = recommend_Assignment(journal);
-		ReviewerRecommend reviewerRecommend = new ReviewerRecommend();
-		reviewerRecommend.setJournal_id(journal.getId());
+		//HashMap<Manuscript, List<Reviewer>> recommend_List = recommend_Assignment(journal);
+		manuscriptReviewerRecommendDao.deleteAll();
+
+		List<ReviewerRecommend> reviewerRecommends = recommend_Assignment(journal);
+
 		System.out.println("test - 4");
-		for(Manuscript m: recommend_List.keySet())
+		for(ReviewerRecommend rr: reviewerRecommends)
 		{
-			reviewerRecommend.setManuscript_id(m.getId());
-			reviewerRecommend.setRevision_count(m.getRevisionCount());
-			for(Reviewer r: recommend_List.get(m))
-			{
-				reviewerRecommend.setReviewer_user_id(r.getUser().getId());
-				manuscriptReviewerRecommendDao.insert(reviewerRecommend);
-			}
+			manuscriptReviewerRecommendDao.insert(rr);
 		}
 
 		System.out.println("end recommend Assignment");
 	}
 
-	public HashMap<Manuscript, List<Reviewer>> recommend_Assignment(Journal journal)  //Main !!! //일단완료
+	public List<ReviewerRecommend> recommend_Assignment(Journal journal)  //Main !!! //일단완료
 	{
 		System.out.println("start recommend Assignment");
 
-		manuscriptReviewerRecommendDao.deleteAll();
-
 		HashMap<Manuscript, List<Reviewer>> map = new HashMap<Manuscript, List<Reviewer>>();
+
+		HashMap<Reviewer, Double> reviewer_Fvalue = new HashMap<Reviewer, Double>();
+		HashMap<Reviewer, Double> reviewer_FRvalue = new HashMap<Reviewer, Double>();
+		List<ReviewerRecommend> reviewerRecommends = new ArrayList<ReviewerRecommend>();
+		ReviewerRecommend reviewerRecommend = new ReviewerRecommend();
 
 		//System.out.println("test - 1");
 		List<Reviewer> reviewers = getPossibleReviewers(journal);
@@ -170,18 +276,17 @@ public class RecommendService {
 		{
 			System.out.println(rr.getUser().getId() + " count : " + recommend_constraint.get(rr));
 		}
-*/
+		 */
 
 		for(Manuscript m: manuscripts) {
 			List<Reviewer> final_reviewers = new ArrayList<Reviewer>();
 			List<Reviewer> reviewers_1 = new ArrayList<Reviewer>();
 			Reviewer max_r = new Reviewer();
 			Reviewer min_r = new Reviewer();
+			reviewer_Fvalue = new HashMap<Reviewer, Double>();
+			reviewer_FRvalue = new HashMap<Reviewer, Double>();
 
 			//리뷰 가능한 사람이 아무도 없는경우 - 해당 논문 추천 필터링
-
-			HashMap<Reviewer, Double> reviewer_Fvalue = new HashMap<Reviewer, Double>();
-			HashMap<Reviewer, Double> reviewer_FRvalue = new HashMap<Reviewer, Double>();
 
 			for(Reviewer r: reviewers) {
 				if(canReview(m, r, journal) == true ) {
@@ -210,7 +315,11 @@ public class RecommendService {
 						max_r = r;
 				}
 
+				if( reviewer_Fvalue.get(max_r) == 0)
+					break;
+
 				reviewers_1.add(max_r);
+
 			}//1차 추천목록 끝
 
 			//1차 추천 목록을 가지고 FR로 추천목록 결정하기
@@ -223,28 +332,50 @@ public class RecommendService {
 				if( j == reviewer_FRvalue.size())
 					break;
 
-				min_r = reviewers_1.get(0);  //1차목록중 초기값
+				for(Reviewer r: reviewers_1)
+				{
+					if( final_reviewers.contains(r) == false) {
+						min_r = r;
+						break;
+					}
+
+				} //1차목록중 초기값
 
 				for(Reviewer r: reviewers_1) {
-					if( reviewer_FRvalue.get(min_r) > reviewer_FRvalue.get(r) ) {
+					if( reviewer_FRvalue.get(min_r) > reviewer_FRvalue.get(r) && final_reviewers.contains(r) == false) {
 						min_r = r;
 					}
 				}
-				
+
 				final_reviewers.add(min_r);
-				reviewers_1.remove(min_r);
 				recommend_constraint.put(min_r, recommend_constraint.get(min_r) - 1);
 			}
 			//한 논문에 대하여 추천목록 결정완료
 			map.put(m, final_reviewers);
+
+
+			//@@@
+			for(Reviewer r : final_reviewers)
+			{
+				reviewerRecommend = new ReviewerRecommend();
+				reviewerRecommend.setManuscript_id(m.getId());
+				reviewerRecommend.setRevision_count(m.getRevisionCount());
+				reviewerRecommend.setReviewer_user_id(r.getUser().getId());
+				reviewerRecommend.setRecommend_value(reviewer_Fvalue.get(r));
+				reviewerRecommend.setFr_value(reviewer_FRvalue.get(r));
+
+				reviewerRecommends.add(reviewerRecommend);
+			}
+			//@@@
 		}
-/*
+		/*
 		for(Reviewer rr : recommend_constraint.keySet() )
 		{
 			System.out.println(rr.getUser().getId() + " count : " + recommend_constraint.get(rr));
 		}
-*/
-		return map;
+		 */
+
+		return reviewerRecommends;
 	}
 
 	public List<Reviewer> getPossibleReviewers(Journal journal) {  //일단 완료
@@ -328,5 +459,55 @@ public class RecommendService {
 
 		return sd;
 	}
+
+	public static List<String> mixString(int mixNum, List<String> sList, int currentIndex, String currentS, List<String> resultList, int currentMix, List<Boolean> boolList)
+	{                                     //몇개 조합	     전체 스트링 리스트			 몇번재부터 시작			현재 스트링상태			결과목록			현재 몇개 섞음			누가 포함됐는지
+		if(currentMix == mixNum)
+		{
+			resultList.add(currentS);
+			if(currentIndex+1 == sList.size())
+			{
+				return resultList;
+			}
+			else
+			{
+				for(int i=0; i<boolList.size(); i++)
+				{
+					boolList.set(i, false);
+				}
+				currentS="";
+				currentMix = 0;
+
+				return mixString(mixNum, sList, currentIndex, currentS, resultList, currentMix, boolList);
+			}
+		}
+		else
+		{
+			if(sList.size()-currentIndex < mixNum)
+				return resultList;
+
+			for(int i=currentIndex; i<sList.size(); i++)
+			{
+				if(boolList.get(i) == true)
+					continue;
+				if(!resultList.contains(currentS.concat(sList.get(i))))
+				{
+					currentS = currentS.concat(sList.get(i));
+					boolList.set(i, true);
+					currentMix += 1;
+					return mixString(mixNum, sList, currentIndex, currentS, resultList, currentMix, boolList);
+				}
+			}
+			for(int i=0; i<boolList.size(); i++)
+			{
+				boolList.set(i, false);
+			}
+			currentS="";
+			currentMix = 0;
+
+			return mixString(mixNum, sList, currentIndex+1, currentS, resultList, currentMix, boolList);
+
+		}
+	}//COI빼야대고 "" null인애 빼야댐
 }
 

@@ -16,7 +16,7 @@ public class ManuscriptReviewerRecommendDaoImpl extends NamedParameterJdbcDaoSup
 	
 	@Override
 	public void insert(ReviewerRecommend reviewerRecommend) {
-		String sql = "INSERT INTO MANUSCRIPTS_REVIEWER_RECOMMEND (REVIEWER_USER_ID, MANUSCRIPT_ID, JOURNAL_ID, REVISION_COUNT) " + "VALUES (:reviewer_user_id, :manuscript_id, :journal_id, :revision_count)";
+		String sql = "INSERT INTO MANUSCRIPTS_REVIEWER_RECOMMEND (REVIEWER_USER_ID, MANUSCRIPT_ID, REVISION_COUNT, RECOMMEND_VALUE, FR_VALUE) " + " VALUES (:reviewer_user_id, :manuscript_id, :revision_count, :recommend_value, :fr_value)";
 		
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(reviewerRecommend);
 		this.getNamedParameterJdbcTemplate().update(sql, parameterSource);
@@ -48,8 +48,8 @@ public class ManuscriptReviewerRecommendDaoImpl extends NamedParameterJdbcDaoSup
 	
 	@Override
 	public void update(ReviewerRecommend reviewerRecommend) {
-		String sql = "UPDATE MANUSCRIPTS_REVIEWER_RECOMMEND SET REVIEWER_USER_ID =? , MANUSCRIPT_ID =?, JOURNAL_ID =?, REVISION_COUNT=?, WHERE ID = ?";
-		this.getJdbcTemplate().update(sql, new Object[] {reviewerRecommend.getReviewer_user_id() , reviewerRecommend.getManuscript_id() , reviewerRecommend.getJournal_id(), reviewerRecommend.getRevision_count(), reviewerRecommend.getId()});
+		String sql = "UPDATE MANUSCRIPTS_REVIEWER_RECOMMEND SET REVIEWER_USER_ID =? , MANUSCRIPT_ID =?, REVISION_COUNT=?, RECOMMEND_VALUE = ?, FR_VALUE = ? WHERE ID = ?";
+		this.getJdbcTemplate().update(sql, new Object[] {reviewerRecommend.getReviewer_user_id() , reviewerRecommend.getManuscript_id() , reviewerRecommend.getRevision_count(), reviewerRecommend.getRecommend_value(), reviewerRecommend.getFr_value(), reviewerRecommend.getId()});
 	}
 
 	@Override
