@@ -137,10 +137,16 @@ public class RootConfiguration extends WebMvcConfigurerAdapter{
 	@Bean(name="dataSource")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/jms?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;autoReconnect=true");
-        dataSource.setUsername("root");
-        dataSource.setPassword("jipskorg");
-
+        if(SystemConstants.TEST_MODE) {
+            dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/jms?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;autoReconnect=true");
+            dataSource.setUsername("root");
+            dataSource.setPassword("jipskorg");
+        } else {
+            dataSource.setUrl("jdbc:mysql://db.manuscriptlink.com:3306/jms?zeroDateTimeBehavior=convertToNull&amp;characterEncoding=UTF-8&amp;autoReconnect=true");
+            dataSource.setUsername("manuscriptlink");
+            dataSource.setPassword("link#1234");
+        }
+        
         dataSource.setDriverClassName(this.driverClassName);
         dataSource.setInitialSize(5);
         dataSource.setMaxActive(15);
@@ -206,7 +212,7 @@ public class RootConfiguration extends WebMvcConfigurerAdapter{
 	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();
-		bundle.setBasenames(new String[] {"WEB-INF/classes/resources/initial_data", "WEB-INF/classes/i18n/message", "WEB-INF/classes/i18n/email"});
+		bundle.setBasenames(new String[] {"WEB-INF/classes/i18n/message", "WEB-INF/classes/i18n/email"});
 		bundle.setCacheSeconds(1);
 		bundle.setFallbackToSystemLocale(false);
 		return bundle;

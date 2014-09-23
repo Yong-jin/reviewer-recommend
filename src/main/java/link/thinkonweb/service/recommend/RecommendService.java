@@ -3,9 +3,11 @@ package link.thinkonweb.service.recommend;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+
+import javax.inject.Inject;
 
 import link.thinkonweb.configuration.SystemConstants;
+import link.thinkonweb.dao.manuscript.KeywordDao;
 import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
 import link.thinkonweb.dao.manuscript.ReviewEventDateTimeDao;
 import link.thinkonweb.domain.journal.Journal;
@@ -16,29 +18,94 @@ import link.thinkonweb.domain.manuscript.ReviewerRecommend;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.domain.user.UserExpertise;
+import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.manuscript.ManuscriptService;
 import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.UserExpertiseService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class RecommendService {
 	private List<Keyword> keywords;
 	private List<UserExpertise> expertises;
 	private HashMap<Reviewer, Integer> recommend_constraint = new HashMap<Reviewer, Integer>();
 
-	@Autowired
+	@Inject
 	private UserExpertiseService userExpertiseService;
-	@Autowired
+	@Inject
 	private ReviewerService reviewerService;
-	@Autowired
+	@Inject
 	private ReviewEventDateTimeDao reviewEventDateTimeDao;
-	@Autowired
+	@Inject
 	private ManuscriptService manuscriptService;
-	@Autowired
+	@Inject
 	private ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
+	@Inject
+	private JournalService journalService;
+    @Inject
+    private RecommendService recommendService;
+    @Inject
+    private KeywordDao keywordDao;
+    
+    //Main 함수에서 이 함수를 실행할 것
+	public void recommend() {
+	    List<Journal> allJournal = journalService.getAll();
+        for(Journal journal: allJournal) {
+            //HashMap<Manuscript, List<Reviewer>> recommend_List = recommendService.recommend_Assignment(journal);
 
+            //밑줄 주석 해제 - 추천 수행
+            recommendService.process_Recommend(journal); //수행 DB에 저장
+            List<ReviewerRecommend> reviewerRecommends = manuscriptReviewerRecommendDao.findAll(); //DB에서 불러오기
+            int manuscriptId = reviewerRecommends.get(0).getManuscript_id();
+            System.out.println("\nPaper Id " + manuscriptId + "`s Recommend List");
+            for(Keyword k :  keywordDao.findByManuscriptId(manuscriptId)) //(manuscriptDao.findById(manuscriptId)).getKeywords()  )
+            {
+                System.out.print(k.getKeyword()+"\n");
+            }
+            System.out.println();
+            for(ReviewerRecommend r: reviewerRecommends)
+            {
+                if( manuscriptId == r.getManuscript_id()) {
+                    System.out.println(" - " + r.getReviewer_user_id());
+                    for(UserExpertise ue: userExpertiseService.getExpertises(r.getReviewer_user_id()) )
+                    {
+                        System.out.print(ue.getExpertise() + "\n");
+                    }
+                    System.out.println();
+                    System.out.println("    F_value : " + r.getRecommend_value());
+                    System.out.println("    FR_value : " + r.getFr_value());
+                }
+                else {
+                    manuscriptId = r.getManuscript_id();
+                    System.out.println("\nPaper Id " + manuscriptId + "`s Recommend List");
+                    for(Keyword k : keywordDao.findByManuscriptId(manuscriptId) )
+                    {
+                        System.out.print(k.getKeyword()+"\n");
+                    }
+                    System.out.println();
+                    System.out.println(" - " + r.getReviewer_user_id());
+                    for(UserExpertise ue: userExpertiseService.getExpertises(r.getReviewer_user_id()) )
+                    {
+                        System.out.print(ue.getExpertise() + "\n");
+                    }
+                    System.out.println();
+                    System.out.println("    F_value : " + r.getRecommend_value());
+                    System.out.println("    FR_value : " + r.getFr_value());
 
+                }
+            }
+            
+            System.out.println("Fitness value : " + recommendService.fitness_function(reviewerRecommends));
+            /*
+            for(Manuscript m: recommend_List.keySet())
+            {
+                System.out.println("Manuscript : " + m.getId());
+                for(Reviewer r: recommend_List.get(m))
+                {
+                    System.out.println("Reviewer : " + r.getUser().getId());
+                }
+            }
+            */
+        }
+	}
 
 	public double commonKeywords(Manuscript m, SystemUser r) {  //공통키워드 수 찾기
 		double common = 0;
