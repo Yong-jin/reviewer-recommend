@@ -24,7 +24,7 @@ public class ManuscriptRowMapper implements RowMapper<Manuscript> {
 		manuscript.setSubmitStep(rs.getInt("SUBMIT_STEP"));
 		manuscript.setTitle(rs.getString("TITLE"));
 		manuscript.setRunningHead(rs.getString("RUNNINGHEAD"));
-		manuscript.setPaperAbstract(rs.getString("ABSTRACT"));
+		manuscript.setPaperAbstract(rs.getString("PAPER_ABSTRACT"));
 		manuscript.setChiefEditorUserId(rs.getInt("CHIEF_USER_ID"));
 		manuscript.setAssociateEditorUserId(rs.getInt("AE_USER_ID"));
 		manuscript.setGuestEditorUserId(rs.getInt("GE_USER_ID"));

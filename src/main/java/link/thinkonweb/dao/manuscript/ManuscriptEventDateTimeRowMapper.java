@@ -24,7 +24,7 @@ public class ManuscriptEventDateTimeRowMapper implements RowMapper<Manuscript> {
 		manuscript.setSubmitStep(rs.getInt("M.SUBMIT_STEP"));
 		manuscript.setTitle(rs.getString("M.TITLE"));
 		manuscript.setRunningHead(rs.getString("M.RUNNINGHEAD"));
-		manuscript.setPaperAbstract(rs.getString("M.ABSTRACT"));
+		manuscript.setPaperAbstract(rs.getString("M.PAPER_ABSTRACT"));
 		manuscript.setChiefEditorUserId(rs.getInt("M.CHIEF_USER_ID"));
 		manuscript.setAssociateEditorUserId(rs.getInt("M.AE_USER_ID"));
 		manuscript.setGuestEditorUserId(rs.getInt("M.GE_USER_ID"));
