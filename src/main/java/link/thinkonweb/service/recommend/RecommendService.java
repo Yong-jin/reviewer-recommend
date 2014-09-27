@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.manuscript.KeywordDao;
 import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
@@ -22,7 +24,7 @@ import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.manuscript.ManuscriptService;
 import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.UserExpertiseService;
-
+@Service
 public class RecommendService {
 	private List<Keyword> keywords;
 	private List<UserExpertise> expertises;

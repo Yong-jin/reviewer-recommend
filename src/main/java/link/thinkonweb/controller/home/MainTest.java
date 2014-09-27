@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import link.thinkonweb.dao.manuscript.KeywordDao;
 import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
 import link.thinkonweb.domain.manuscript.Keyword;
@@ -13,7 +16,7 @@ import link.thinkonweb.domain.user.UserExpertise;
 import link.thinkonweb.service.recommend.RecommendService;
 import link.thinkonweb.service.user.UserExpertiseService;
 
-
+@Component
 public class MainTest {
 	@Inject
 	private static KeywordDao keywordDao;
@@ -21,7 +24,7 @@ public class MainTest {
 	private static UserExpertiseService userExpertiseService;
 	@Inject
 	private static RecommendService recommendService;
-	@Inject
+	@Autowired
 	private static ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

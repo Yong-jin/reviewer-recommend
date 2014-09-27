@@ -12,7 +12,8 @@ import link.thinkonweb.domain.user.UserExpertise;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-
+import org.springframework.stereotype.Service;
+@Service
 public class UserExpertiseServiceImpl implements UserExpertiseService {
 	@Inject
 	private UserExpertiseDao userExpertiseDao;
