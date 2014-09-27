@@ -3,14 +3,15 @@ package link.thinkonweb.dao.user;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.domain.user.Contact;
 import link.thinkonweb.domain.user.SystemUser;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 
 public class UserContactRowMapper implements RowMapper<SystemUser> {
-	@Autowired
+	@Inject
 	private CountryCodeDao countryCodeDao; 
 	
 	public UserContactRowMapper() {

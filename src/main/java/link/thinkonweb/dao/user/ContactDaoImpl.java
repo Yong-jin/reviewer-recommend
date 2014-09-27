@@ -4,17 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.domain.user.Contact;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 public class ContactDaoImpl extends NamedParameterJdbcDaoSupport implements ContactDao {
-	@Autowired
+	@Inject
 	private ContactRowMapper contactRowMapper;
 	
-	@Autowired
+	@Inject
 	private CountryCodeDao countryCodeDao;
 	
 	@Override

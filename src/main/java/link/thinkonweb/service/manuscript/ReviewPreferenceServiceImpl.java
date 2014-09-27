@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.manuscript.CoAuthorDao;
 import link.thinkonweb.dao.manuscript.ReviewPreferenceDao;
@@ -16,21 +18,19 @@ import link.thinkonweb.domain.user.Contact;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.user.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 public class ReviewPreferenceServiceImpl implements ReviewPreferenceService {
-	@Autowired
+	@Inject
 	private ReviewPreferenceDao reviewPreferenceDao;
-	@Autowired
+	@Inject
 	private CoAuthorDao coAuthorDao;
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private ContactDao contactDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private ManuscriptService manuscriptService;
 	
 	@Override

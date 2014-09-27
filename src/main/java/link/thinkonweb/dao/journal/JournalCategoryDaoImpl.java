@@ -7,7 +7,7 @@ import java.util.List;
 
 import link.thinkonweb.domain.journal.JournalCategory;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -15,7 +15,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class JournalCategoryDaoImpl extends NamedParameterJdbcDaoSupport implements JournalCategoryDao {
-	@Autowired
+	@Inject
 	private JournalCategoryRowMapper jcRowMapper;
 
 	@Override

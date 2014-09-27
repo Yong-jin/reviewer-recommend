@@ -2,7 +2,7 @@ package link.thinkonweb.dao.manuscript;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import link.thinkonweb.domain.manuscript.ReviewerRecommend;
 
 public class ManuscriptReviewerRecommendDaoImpl extends NamedParameterJdbcDaoSupport implements ManuscriptReviewerRecommendDao{
-	@Autowired
+	@Inject
 	private ManuscriptReviewerRecommendRowMapper manuscriptReviewerRecommendRowMapper;
 	
 	@Override

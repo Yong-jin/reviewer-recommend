@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.manuscript.CoAuthorDao;
 import link.thinkonweb.dao.user.AuthorityDao;
@@ -20,26 +22,24 @@ import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.user.ContactService;
 import link.thinkonweb.service.user.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class CoAuthorServiceImpl implements CoAuthorService {
-	@Autowired
+	@Inject
 	private CoAuthorDao coAuthorDao;
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private ManuscriptService manuscriptService;
-	@Autowired
+	@Inject
 	private ContactService contactService;
-	@Autowired
+	@Inject
 	private AuthorityDao authorityDao;
-	@Autowired
+	@Inject
 	private ContactDao contactDao;
-	@Autowired
+	@Inject
 	private JournalService journalService;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private CountryCodeDao countryCodeDao;
 
 	@Override

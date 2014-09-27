@@ -9,7 +9,7 @@ import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.Manuscript;
 import link.thinkonweb.util.DataTableClientRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -18,10 +18,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class ManuscriptDaoImpl extends NamedParameterJdbcDaoSupport implements ManuscriptDao {
-	@Autowired
+	@Inject
 	private ManuscriptRowMapper manuscriptRowMapper;
 
-	@Autowired
+	@Inject
 	private ManuscriptStatisticsRowMapper manuscriptStatisticsRowMapper;
 
 	@Override

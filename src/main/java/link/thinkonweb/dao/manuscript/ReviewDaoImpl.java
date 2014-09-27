@@ -7,7 +7,7 @@ import java.util.Map;
 import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.util.DataTableClientRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -16,9 +16,9 @@ import org.springframework.jdbc.support.KeyHolder;
 
 
 public class ReviewDaoImpl extends NamedParameterJdbcDaoSupport implements ReviewDao {
-	@Autowired
+	@Inject
 	private ReviewRowMapper reviewRowMapper;
-	@Autowired
+	@Inject
 	private ReviewManuscriptRowMapper reviewManuscriptRowMapper;
 
 	@Override

@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.domain.user.Authority;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 public class AuthorityDaoImpl extends NamedParameterJdbcDaoSupport implements AuthorityDao {
-	@Autowired
+	@Inject
 	private AuthorityRowMapper authorityRowMapper;
 	
 	@Override

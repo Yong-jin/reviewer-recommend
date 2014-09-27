@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.journal.DivisionDao;
 import link.thinkonweb.dao.journal.JournalDao;
@@ -21,18 +23,16 @@ import link.thinkonweb.service.user.AuthorityService;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class JournalServiceImpl implements JournalService {
-	@Autowired
+	@Inject
 	private JournalDao journalDao;
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
-	@Autowired
+	@Inject
 	private DivisionDao divisionDao;
-	@Autowired
+	@Inject
 	private JournalRoleDao journalRoleDao;
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
 	
 	public JournalDao getJournalDao() {

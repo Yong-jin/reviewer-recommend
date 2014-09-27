@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.journal.JournalDao;
@@ -28,32 +25,35 @@ import link.thinkonweb.domain.roles.Member;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+
 public class JournalRoleDaoImpl extends NamedParameterJdbcDaoSupport implements JournalRoleDao {
-	@Autowired
+	@Inject
 	private JournalDao journalDao;
 	
-	@Autowired
+	@Inject
 	private UserDao userDao;
 	
-	@Autowired
+	@Inject
 	private JournalMemberRowMapper journalMemberRowMapper; 
 	
-	@Autowired
+	@Inject
 	private JournalReviewerRowMapper journalReviewerRowMapper;
 	
-	@Autowired
+	@Inject
 	private JournalAssociateEditorRowMapper journalAssociateEditorRowMapper;
 	
-	@Autowired
+	@Inject
 	private JournalChiefEditorRowMapper journalChiefEditorRowMapper;
 	
-	@Autowired
+	@Inject
 	private JournalGuestEditorRowMapper journalGuestEditorRowMapper;
 	
-	@Autowired
+	@Inject
 	private JournalManagerRowMapper journalManagerRowMapper;
 
-	@Autowired
+	@Inject
 	private JournalBoardMemberRowMapper journalBoardMemberRowMapper;
 	
 	final String[] journalRoleTableNames={"JOURNAL_MEMBERS", 
@@ -76,7 +76,7 @@ public class JournalRoleDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	public JournalRoleDaoImpl() {
 	}
 	
-	@Autowired 
+	@Inject 
 	public JournalRoleDaoImpl(DataSource dataSource) {
 	    super();
 	    setDataSource(dataSource);

@@ -4,7 +4,7 @@ import java.util.List;
 
 import link.thinkonweb.domain.manuscript.UploadedFile;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class UploadedFileDaoImpl extends NamedParameterJdbcDaoSupport implements UploadedFileDao {
-	@Autowired
+	@Inject
 	private UploadedFileRowMapper ufRowMapper;
 
 	public UploadedFile findById(int id) {

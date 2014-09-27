@@ -4,12 +4,12 @@ import java.util.List;
 
 import link.thinkonweb.domain.journal.Category;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 public class CategoryDaoImpl extends NamedParameterJdbcDaoSupport implements CategoryDao {
-	@Autowired
+	@Inject
 	private CategoryRowMapper categoryRowMapper;
 
 	@Override

@@ -3,6 +3,7 @@ package link.thinkonweb.service.manuscript;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import link.thinkonweb.configuration.SystemConstants;
@@ -33,7 +34,6 @@ import link.thinkonweb.domain.manuscript.Manuscript;
 import link.thinkonweb.domain.manuscript.ManuscriptAbstract;
 import link.thinkonweb.domain.manuscript.RunningHead;
 import link.thinkonweb.domain.manuscript.Title;
-import link.thinkonweb.domain.manuscript.UploadedFile;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.journal.JournalConfigurationService;
 import link.thinkonweb.service.journal.JournalService;
@@ -46,65 +46,64 @@ import link.thinkonweb.util.SystemUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 public class ManuscriptServiceImpl implements ManuscriptService {
 	@SuppressWarnings("unused")
 	private Log log = LogFactory.getLog(ManuscriptServiceImpl.class);
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private ContactService contactService;
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
-	@Autowired
+	@Inject
 	private UserExpertiseService userExpertiseService;
-	@Autowired
+	@Inject
 	private ManuscriptDao manuscriptDao;
-	@Autowired
+	@Inject
 	private KeywordDao keywordDao;
-	@Autowired
+	@Inject
 	private TitleDao titleDao;
-	@Autowired
+	@Inject
 	private CoverLetterDao coverLetterDao;
-	@Autowired
+	@Inject
 	private RunningHeadDao runningHeadDao;
-	@Autowired
+	@Inject
 	private AbstractDao abstractDao;
-	@Autowired
+	@Inject
 	private ContactDao contactDao;
-	@Autowired
+	@Inject
 	private CoAuthorDao coAuthorDao;
-	@Autowired
+	@Inject
 	private ReviewPreferenceService rpService;
-	@Autowired
+	@Inject
 	private SpecialIssueDao specialIssueDao;
-	@Autowired
+	@Inject
 	private CoAuthorService coAuthorService;
-	@Autowired
+	@Inject
 	private UploadedFileDaoImpl uploadedFileDao;
-	@Autowired
+	@Inject
 	private ReviewDaoImpl reviewDao;
-	@Autowired
+	@Inject
 	private FinalDecisionDao finalDecisionDao;
-	@Autowired
+	@Inject
 	private MessageSource messageSource;
-	@Autowired
+	@Inject
 	private CommentDao commentDao;
-	@Autowired
+	@Inject
 	private EventDateTimeDao eventDateTimeDao;
-	@Autowired
+	@Inject
 	private JournalRoleDao journalRoleDao;
-	@Autowired
+	@Inject
 	private ManuscriptBuilder manuscriptBuilder;
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
-	@Autowired
+	@Inject
 	private JournalService journalService;
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private JournalConfigurationService journalConfigurationService;
 	
 	@Override

@@ -6,14 +6,14 @@ import java.util.List;
 import link.thinkonweb.domain.manuscript.EventDateTime;
 import link.thinkonweb.domain.manuscript.ReviewEventDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 public class ReviewEventDateTimeDaoImpl extends NamedParameterJdbcDaoSupport implements ReviewEventDateTimeDao {
-	@Autowired
+	@Inject
 	private ReviewEventDateTimeRowMapper reviewEventDateTimeRowMapper;
 	
 	public void setEventDateRowMapper(ReviewEventDateTimeRowMapper reviewEventDateTimeRowMapper) {

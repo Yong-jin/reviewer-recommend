@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import link.thinkonweb.configuration.SystemConstants;
@@ -19,7 +20,6 @@ import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -31,21 +31,21 @@ import org.springframework.stereotype.Service;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserService, UserDetailsService {
-	@Autowired
+	@Inject
 	private UserDao userDao;
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
-	@Autowired
+	@Inject
 	private ContactService contactService;
-	@Autowired
+	@Inject
 	private JournalService journalService;
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
-	@Autowired
+	@Inject
 	private UserDetailsManager userDetailsManager;
-	@Autowired
+	@Inject
 	private ShaPasswordEncoder shaPasswordEncoder;
-	@Autowired
+	@Inject
 	private ChangePasswordCodeDao changePasswordCodeDao;
 	
 	@Override

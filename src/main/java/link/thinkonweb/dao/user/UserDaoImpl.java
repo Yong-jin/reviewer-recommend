@@ -11,14 +11,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
-import javax.sql.DataSource;
+import javax.inject.Inject;
 
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.user.ContactService;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -26,19 +25,16 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class UserDaoImpl extends NamedParameterJdbcDaoSupport implements UserDao {
-	@Autowired
+	@Inject
 	private UserRowMapper userRowMapper;
 	
-	@Autowired
+	@Inject
 	private UserContactRowMapper userContactRowMapper;
 	
-	@Autowired
+	@Inject
 	private ContactService contactService;
-	
-	@Autowired
-	private DataSource dataSource;
 
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
 			
 	@Override

@@ -4,7 +4,7 @@ import java.util.List;
 
 import link.thinkonweb.domain.journal.UserDivision;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -14,13 +14,13 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 public class UserDivisionDaoImpl extends NamedParameterJdbcDaoSupport implements UserDivisionDao {
-	@Autowired
+	@Inject
 	private UserDivisionRowMapper userDivisionRowMapper;
 
-	@Autowired
+	@Inject
 	private DivisionDao divisionDao;
 	
-	@Autowired
+	@Inject
 	private UserDivisionDivisionRowMapper userDivisionDivisionRowMapper;
 
 	@Override

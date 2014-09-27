@@ -4,7 +4,7 @@ import java.util.List;
 
 import link.thinkonweb.domain.journal.Division;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -14,7 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 public class DivisionDaoImpl extends NamedParameterJdbcDaoSupport implements DivisionDao {
-	@Autowired
+	@Inject
 	private DivisionRowMapper divisionRowMapper;
 	@Override
 	public void setDivisionRowMapper(DivisionRowMapper divisionRowMapper) {

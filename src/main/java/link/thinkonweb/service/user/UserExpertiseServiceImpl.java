@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.dao.user.UserExpertiseDao;
 import link.thinkonweb.domain.user.UserExpertise;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserExpertiseServiceImpl implements UserExpertiseService {
-	@Autowired
+	@Inject
 	private UserExpertiseDao userExpertiseDao;
-	@Autowired
+	@Inject
 	private ObjectMapper objectMapper;
 
 	@Override

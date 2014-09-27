@@ -8,11 +8,11 @@ import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.user.Contact;
 import link.thinkonweb.domain.user.SystemUser;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.jdbc.core.RowMapper;
 
 public class JournalUserContactRowMapper implements RowMapper<Journal> {
-	@Autowired
+	@Inject
 	private CountryCodeDao countryCodeDao; 
 	
 	public JournalUserContactRowMapper() {

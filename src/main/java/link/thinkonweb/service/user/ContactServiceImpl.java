@@ -3,16 +3,17 @@ package link.thinkonweb.service.user;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.user.ContactDao;
 import link.thinkonweb.domain.user.Contact;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactServiceImpl implements ContactService {
-	@Autowired
+	@Inject
 	private ContactDao contactDao;
 		
 	@Override

@@ -4,14 +4,14 @@ import java.util.List;
 
 import link.thinkonweb.domain.manuscript.ManuscriptAbstract;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 public class AbstractDaoImpl extends NamedParameterJdbcDaoSupport implements AbstractDao {
-	@Autowired
+	@Inject
 	private AbstractRowMapper maRowMapper;
 
 	@Override

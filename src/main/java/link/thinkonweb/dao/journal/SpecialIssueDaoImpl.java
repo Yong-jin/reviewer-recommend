@@ -7,7 +7,7 @@ import java.util.Map;
 import link.thinkonweb.domain.journal.SpecialIssue;
 import link.thinkonweb.util.DataTableClientRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -16,7 +16,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class SpecialIssueDaoImpl extends NamedParameterJdbcDaoSupport implements SpecialIssueDao {
-	@Autowired
+	@Inject
 	private SpecialIssueRowMapper specialIssueRowMapper;
 	public int insert(SpecialIssue specialIssue) {
 		String sql = "INSERT INTO SPECIAL_ISSUES (JOURNAL_ID, TITLE, DESCRIPTION, SUBMIT_DUE_DATE, SUBMIT_DUE_TIME, CREATE_DATE, CREATE_TIME, STATUS, GE_USER_ID) " +

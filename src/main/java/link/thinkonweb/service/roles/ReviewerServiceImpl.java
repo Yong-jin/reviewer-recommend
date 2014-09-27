@@ -1,13 +1,11 @@
 package link.thinkonweb.service.roles;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.inject.Inject;
 
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.manuscript.FinalDecisionDao;
@@ -22,14 +20,12 @@ import link.thinkonweb.dao.manuscript.form.CommentDao;
 import link.thinkonweb.dao.roles.JournalRoleDao;
 import link.thinkonweb.dao.user.UserDao;
 import link.thinkonweb.domain.constants.AdditionalReviewFileDesignation;
-import link.thinkonweb.domain.email.EmailMessage;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.FinalDecision;
 import link.thinkonweb.domain.manuscript.Manuscript;
 import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.domain.manuscript.ReviewEventDateTime;
 import link.thinkonweb.domain.manuscript.ReviewRequest;
-import link.thinkonweb.domain.manuscript.ReviewerSuggest;
 import link.thinkonweb.domain.roles.Reviewer;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.journal.JournalConfigurationService;
@@ -41,47 +37,46 @@ import link.thinkonweb.service.user.UserService;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 
 public class ReviewerServiceImpl implements ReviewerService {
-	@Autowired
+	@Inject
 	private ManuscriptDao manuscriptDao;
-	@Autowired
+	@Inject
 	private ReviewDaoImpl reviewDao;
-	@Autowired
+	@Inject
 	private ReviewRequestDao reviewRequestDao;
-	@Autowired
+	@Inject
 	private ReviewEventDateTimeDao reviewEventDateTimeDao;
-	@Autowired
+	@Inject
 	private UploadedFileDaoImpl uploadedFileDao;
-	@Autowired
+	@Inject
 	private JournalRoleDao journalRoleDao;
-	@Autowired
+	@Inject
 	private KeywordDao keywordDao;
-	@Autowired
+	@Inject
 	private CommentDao commentDao;
-	@Autowired
+	@Inject
 	private FinalDecisionDao finalDecisionDao;
-	@Autowired
+	@Inject
 	private ManuscriptService manuscriptService;
-	@Autowired
+	@Inject
 	private JournalConfigurationService journalConfigurationService;
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private JournalService journalService;
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
-	@Autowired
+	@Inject
 	private UserExpertiseService userExpertiseService;
-	@Autowired
+	@Inject
 	private MessageSource messageSource;
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
-	@Autowired
+	@Inject
 	private ReviewerSuggestDao reviewerSuggestDao;
-	@Autowired
+	@Inject
 	private UserDao userDao;
 	
 	@Override

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.journal.DivisionDao;
 import link.thinkonweb.dao.manuscript.AbstractDao;
@@ -33,52 +35,49 @@ import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.domain.manuscript.ReviewPreference;
 import link.thinkonweb.domain.manuscript.RunningHead;
 import link.thinkonweb.domain.manuscript.Title;
-import link.thinkonweb.domain.manuscript.UploadedFile;
 import link.thinkonweb.domain.manuscript.form.Comment;
 import link.thinkonweb.service.roles.ReviewerService;
 import link.thinkonweb.service.user.ContactService;
 import link.thinkonweb.service.user.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 
 public class ManuscriptBuilder {
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private ReviewerService reviewerService;
-	@Autowired
+	@Inject
 	private ContactService contactService;
-	@Autowired
+	@Inject
 	private CoAuthorService coAuthorService;
-	@Autowired
+	@Inject
 	private ManuscriptDao manuscriptDao;
-	@Autowired
+	@Inject
 	private TitleDao titleDao;
-	@Autowired
+	@Inject
 	private CoverLetterDao coverLetterDao;
-	@Autowired
+	@Inject
 	private RunningHeadDao runningHeadDao;
-	@Autowired
+	@Inject
 	private AbstractDao abstractDao;
-	@Autowired
+	@Inject
 	private KeywordDao keywordDao;
-	@Autowired
+	@Inject
 	private ReviewPreferenceDao reviewPreferenceDao;
-	@Autowired
+	@Inject
 	private UploadedFileDaoImpl uploadedFileDao;
-	@Autowired
+	@Inject
 	private CoAuthorDao coAuthorDao;
-	@Autowired
+	@Inject
 	private FinalDecisionDao finalDecisionDao;
-	@Autowired
+	@Inject
 	private ReviewDaoImpl reviewDao;
-	@Autowired
+	@Inject
 	private DivisionDao divisionDao;
-	@Autowired
+	@Inject
 	private EventDateTimeDao eventDateTimeDao;
-	@Autowired
+	@Inject
 	private CommentDao commentDao;
 	
 

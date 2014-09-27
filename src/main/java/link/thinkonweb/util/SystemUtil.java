@@ -1,36 +1,36 @@
 package link.thinkonweb.util;
 
-import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
 
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.manuscript.Review;
 import link.thinkonweb.service.user.AuthorityService;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
 @Service
 public class SystemUtil {	
 	private String DATE_FORMAT = "yyyy-MM-dd";
 	private String TIME_FORMAT = "HH:mm:ss";
 	
-	@Autowired
+	@Inject
 	private MessageSource messageSource;
 	
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
 	
 	public String getDateAsString(Date date, String timeZone){

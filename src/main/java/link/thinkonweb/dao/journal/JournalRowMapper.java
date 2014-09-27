@@ -8,14 +8,14 @@ import link.thinkonweb.dao.user.UserDao;
 import link.thinkonweb.domain.journal.Journal;
 import link.thinkonweb.domain.user.SystemUser;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.jdbc.core.RowMapper;
 
 public class JournalRowMapper implements RowMapper<Journal> {
-	@Autowired
+	@Inject
 	private UserDao userDao;
 	
-	@Autowired
+	@Inject
 	private CountryCodeDao countryCodeDao; 
 
 	@Override

@@ -4,14 +4,14 @@ import java.util.List;
 
 import link.thinkonweb.domain.manuscript.Keyword;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 public class KeywordDaoImpl extends NamedParameterJdbcDaoSupport implements KeywordDao {
-	@Autowired
+	@Inject
 	private KeywordRowMapper keywordRowMapper;
 	
 	@Override

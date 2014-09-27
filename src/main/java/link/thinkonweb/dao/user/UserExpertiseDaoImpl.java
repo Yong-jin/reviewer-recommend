@@ -5,9 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.domain.user.UserExpertise;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -15,7 +16,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 public class UserExpertiseDaoImpl extends NamedParameterJdbcDaoSupport implements UserExpertiseDao {
-	@Autowired
+	@Inject
 	UserExpertiseRowMapper userExpertiseRowMapper;
 	
 	@Override

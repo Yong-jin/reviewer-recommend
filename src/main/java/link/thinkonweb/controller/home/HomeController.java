@@ -3,6 +3,7 @@ package link.thinkonweb.controller.home;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +17,6 @@ import link.thinkonweb.service.journal.JournalService;
 import link.thinkonweb.service.user.AuthorityService;
 import link.thinkonweb.service.user.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -37,19 +37,19 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/*")
 public class HomeController {	
 //	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	@Autowired
+	@Inject
 	private UserService userService;
 	
-	@Autowired
+	@Inject
 	private JournalService journalService;
 		
-	@Autowired
+	@Inject
 	private AuthorityService authorityService;
 	
-	@Autowired
+	@Inject
 	private ServletContext context;
 	
-	@Autowired
+	@Inject
 	private ChangePasswordCodeDao changePasswordCodeDao;
 	/**
 	 * Simply selects the home view to render by returning its name.

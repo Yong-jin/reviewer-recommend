@@ -18,24 +18,24 @@ import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.util.DataTableClientRequest;
 import link.thinkonweb.util.SystemUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 public class JournalDaoImpl extends NamedParameterJdbcDaoSupport implements JournalDao {
-	@Autowired
+	@Inject
 	private UserDao userDao;
 	
-	@Autowired
+	@Inject
 	private JournalRowMapper journalRowMapper;
 	
-	@Autowired
+	@Inject
 	private JournalUserContactRowMapper journalUserContactRowMapper;
 
-	@Autowired
+	@Inject
 	private SystemUtil systemUtil;
 
-	@Autowired
+	@Inject
 	private DataSource dataSource;
 
 	@Override

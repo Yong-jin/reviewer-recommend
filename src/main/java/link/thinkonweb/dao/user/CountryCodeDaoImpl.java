@@ -2,14 +2,15 @@ package link.thinkonweb.dao.user;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.domain.user.CountryCode;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 public class CountryCodeDaoImpl extends NamedParameterJdbcDaoSupport implements CountryCodeDao {
-	@Autowired
+	@Inject
 	private CountryCodeRowMapper countryCodeRowMapper;
 
 	@Override

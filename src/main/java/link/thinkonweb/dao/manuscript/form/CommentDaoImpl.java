@@ -5,7 +5,7 @@ import java.util.List;
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.domain.manuscript.form.Comment;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 
 public class CommentDaoImpl extends NamedParameterJdbcDaoSupport implements CommentDao {
-	@Autowired
+	@Inject
 	private CommentRowMapper commentRowMapper;
 
 	@Override

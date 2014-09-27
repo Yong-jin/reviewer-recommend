@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.dao.journal.SubmittedManuscriptDao;
 import link.thinkonweb.dao.manuscript.ManuscriptDao;
 import link.thinkonweb.domain.journal.Journal;
@@ -11,7 +13,6 @@ import link.thinkonweb.domain.journal.SubmittedManuscripts;
 import link.thinkonweb.domain.manuscript.Manuscript;
 import link.thinkonweb.service.journal.JournalService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Controller
 public class SubmitIdGenerator {
 	private String id;
-	@Autowired
+	@Inject
 	private ManuscriptDao manuscriptDao;
-	@Autowired
+	@Inject
 	private SubmittedManuscriptDao submittedManuscriptDao;
-	@Autowired
+	@Inject
 	private JournalService journalService;
 	
 	public void setSubmittedManuscriptDao(SubmittedManuscriptDao submittedManuscriptDao) {

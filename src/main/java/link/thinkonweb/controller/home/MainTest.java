@@ -3,7 +3,7 @@ package link.thinkonweb.controller.home;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import link.thinkonweb.dao.manuscript.KeywordDao;
 import link.thinkonweb.dao.manuscript.ManuscriptReviewerRecommendDao;
@@ -14,14 +14,14 @@ import link.thinkonweb.service.recommend.RecommendService;
 import link.thinkonweb.service.user.UserExpertiseService;
 
 
-public class mainTest {
-	@Autowired
+public class MainTest {
+	@Inject
 	private static KeywordDao keywordDao;
-	@Autowired
+	@Inject
 	private static UserExpertiseService userExpertiseService;
-	@Autowired
+	@Inject
 	private static RecommendService recommendService;
-	@Autowired
+	@Inject
 	private static ManuscriptReviewerRecommendDao manuscriptReviewerRecommendDao;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

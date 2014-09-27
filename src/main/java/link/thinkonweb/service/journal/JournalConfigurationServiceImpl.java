@@ -2,14 +2,14 @@ package link.thinkonweb.service.journal;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.journal.JournalConfigurationDao;
 import link.thinkonweb.domain.journal.JournalConfiguration;
 
 public class JournalConfigurationServiceImpl implements JournalConfigurationService {
-	@Autowired
+	@Inject
 	private JournalConfigurationDao jcDao;
 
 	@Override

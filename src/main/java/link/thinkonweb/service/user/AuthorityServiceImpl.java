@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import link.thinkonweb.configuration.SystemConstants;
 import link.thinkonweb.dao.roles.JournalRoleDao;
 import link.thinkonweb.dao.user.AuthorityDao;
@@ -15,7 +17,6 @@ import link.thinkonweb.domain.user.Authority;
 import link.thinkonweb.domain.user.SystemUser;
 import link.thinkonweb.service.journal.JournalService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,15 +26,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 
 public class AuthorityServiceImpl implements AuthorityService {
-	@Autowired
+	@Inject
 	private AuthorityDao authorityDao;
-	@Autowired
+	@Inject
 	private JournalRoleDao journalRoleDao;
-	@Autowired
+	@Inject
 	private UserDetailsManager userDetailsManager;
-	@Autowired
+	@Inject
 	private UserService userService;
-	@Autowired
+	@Inject
 	private JournalService journalService;
 
 	@Override
