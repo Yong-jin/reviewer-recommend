@@ -243,15 +243,8 @@ public class JournalRoleDaoImpl extends NamedParameterJdbcDaoSupport implements 
 	public void update(JournalRole journalRole) {
 		String tableName = journalRoleBeanClassNameToTableNameMapper(journalRole.getClass().getName());
 		if (tableName != null) {
-			String sql = null;
-			if(journalRole instanceof Reviewer) {
-				Reviewer reviewer = (Reviewer)journalRole;
-				sql = "UPDATE " + tableName + "SET USER_ID = ? AND JOURNAL_ID = ? AND AUTHORITY_ID = ? AND INVITED_UP_TO_NOW = ? AND ASSIGNED_UP_TO_NOW = ? AND COMPLETED_UP_TO_NOW = ? WHERE ID = ?";
-				this.getJdbcTemplate().update(sql, new Object[] {reviewer.getUserId(), reviewer.getJournalId(), reviewer.getAuthorityId(), reviewer.getInvitedUpToNow(), reviewer.getAssignedUpToNow(), reviewer.getCompletedUpToNow(), reviewer.getId()});
-			} else {
-				sql = "UPDATE " + tableName + "SET USER_ID = ? AND JOURNAL_ID = ? AND AUTHORITY_ID = ? WHERE ID = ?";
-				this.getJdbcTemplate().update(sql, new Object[] {journalRole.getUserId(), journalRole.getJournalId(), journalRole.getAuthorityId(), journalRole.getId()});
-			}
+			String sql = "UPDATE " + tableName + "SET USER_ID = ? AND JOURNAL_ID = ? AND AUTHORITY_ID = ? WHERE ID = ?";
+			this.getJdbcTemplate().update(sql, new Object[] {journalRole.getUserId(), journalRole.getJournalId(), journalRole.getAuthorityId(), journalRole.getId()});
 		}
 	}
 	
